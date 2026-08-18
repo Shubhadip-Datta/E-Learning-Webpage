@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>E-Learn | Faculty Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+
+    <!-- ================================
+         SIDEBAR
+         ================================ -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                E
+            </div>
+
+            <div>
+
+                <h2>E-Learn</h2>
+
+                <p>Learning Portal</p>
+
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="#"
+               class="nav-item active">
+
+                <span>⌂</span>
+
+                Dashboard
+
+            </a>
+
+
+            <a href="#"
+   				class="nav-item"
+   				onclick="openMyBatches(); return false;">
+    				<span>▣</span>
+    				My Batches
+			</a>
+
+
+            <a href="#"
+   				class="nav-item"
+   				onclick="openStudents(); return false;">
+    				<span>👥</span>
+    				Students
+			</a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                class="theme-toggle dashboard-theme"
+                id="themeToggle"
+                type="button">
+
+                <span id="themeIcon">
+                    ☀️
+                </span>
+
+                <span id="themeText">
+                    Light
+                </span>
+
+            </button>
+
+
+            <button
+                class="logout-btn"
+                id="logoutBtn">
+
+                <span>↪</span>
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ================================
+         MAIN CONTENT
+         ================================ -->
+
+    <main class="dashboard-content">
+
+
+        <!-- Header -->
+
+        <header class="dashboard-header">
+
+            <div>
+
+                <p class="greeting">
+                    Faculty Portal
+                </p>
+
+                <h1>
+                    Welcome back, Arindam!
+                </h1>
+
+            </div>
+
+
+            <div class="profile-circle">
+                A
+            </div>
+
+        </header>
+
+
+
+        <!-- ================================
+             TEACHER PROFILE
+             ================================ -->
+
+        <section class="student-profile">
+
+            <div class="profile-info">
+
+                <div class="large-profile-circle">
+                    A
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        Arindam Sen
+                    </h2>
+
+                    <p>
+                        Faculty ID: FAC001
+                    </p>
+
+                    <span class="active-badge">
+                        Active Faculty
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="student-details">
+
+                <div>
+
+                    <span>
+                        Subject
+                    </span>
+
+                    <strong>
+                        Java Programming
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Batches
+                    </span>
+
+                    <strong>
+                        <span id="activeBatchCount">2 Active Batches</span>
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+<!-- ================================
+     BATCHES
+     ================================ -->
+
+<section class="dashboard-section" id="myBatchesSection">
+
+    <div class="section-heading">
+
+        <div>
+
+            <p class="section-label">
+                TEACHING
+            </p>
+
+            <h2>
+                My Batches
+            </h2>
+
+        </div>
+
+        <button class="add-batch-btn" onclick="openAddBatch()">
+            + Add Batch
+        </button>
+
+    </div>
+
+    <div class="course-grid" id="batchGrid">
+
+        <!-- Batch cards will be created by JavaScript -->
+
+    </div>
+
+</section>
+
+<!-- ================================
+     STUDENTS
+     ================================ -->
+
+<section
+    class="dashboard-section"
+    id="studentsSection"
+    style="display: none;">
+
+    <div class="section-heading">
+
+    <div>
+        <p class="section-label">
+            LEARNING
+        </p>
+
+        <h2>
+            Students
+        </h2>
+    </div>
+
+    <button
+        type="button"
+        class="close-batch-btn"
+        onclick="closeStudents()">
+        Close
+    </button>
+
+</div>
+
+    <div class="students-overview-card">
+
+        <div class="students-table">
+
+            <div class="student-table-row student-table-header">
+
+                <span>
+                    Student ID
+                </span>
+
+                <span>
+                    Student Name
+                </span>
+
+                <span>
+                    Batch
+                </span>
+
+                <span>
+                    Status
+                </span>
+
+            </div>
+
+            <div id="allStudentsList">
+                <!-- Students will be loaded by JavaScript -->
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================
+     ADD BATCH
+     ================================ -->
+
+<div class="add-batch-card" id="addBatchCard">
+
+    <div class="add-batch-header">
+
+        <div>
+            <p class="section-label">NEW BATCH</p>
+            <h3 id="batchFormTitle">Create Batch</h3>
+        </div>
+
+        <button
+            type="button"
+            class="close-add-batch-btn"
+            onclick="closeAddBatch()">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="add-batch-form">
+
+        <div class="form-group">
+
+            <label for="newBatchName">
+                Batch Name
+            </label>
+
+            <input
+                type="text"
+                id="newBatchName"
+                placeholder="e.g. Java Weekend Batch">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="newBatchSubject">
+                Subject
+            </label>
+
+            <input
+                type="text"
+                id="newBatchSubject"
+                placeholder="e.g. Java Programming">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="newBatchSchedule">
+                Schedule
+            </label>
+
+            <input
+                type="text"
+                id="newBatchSchedule"
+                placeholder="e.g. Saturday & Sunday">
+
+        </div>
+
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label for="newBatchStartDate">
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="newBatchStartDate">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="newBatchEndDate">
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="newBatchEndDate">
+
+            </div>
+
+        </div>
+
+
+        <div class="add-batch-actions">
+
+            <button
+                type="button"
+                class="cancel-batch-btn"
+                onclick="closeAddBatch()">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+    				class="save-batch-btn"
+    				id="saveBatchBtn"
+   				onclick="addBatch()">
+    				Create Batch
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+        <!-- ================================
+             BATCH DETAILS
+             ================================ -->
+
+        <section
+            class="batch-details-section"
+            id="batchDetails"
+            style="display: none;">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="section-label">
+                        BATCH DETAILS
+                    </p>
+
+                    <h2 id="batchTitle">
+                        Batch
+                    </h2>
+
+                </div>
+
+
+                <button
+                    class="close-batch-btn"
+                    onclick="closeBatch()">
+
+                    Close
+
+                </button>
+
+            </div>
+
+
+
+            <!-- Batch Information -->
+
+            <div class="batch-info-card">
+
+                <div>
+
+                    <span>
+                        Starting Date
+                    </span>
+
+                    <strong id="startDate">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Ending Date
+                    </span>
+
+                    <strong id="endDate">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Subject
+                    </span>
+
+                    <strong id="batchSubject">
+    						Java Programming
+					</strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Topics -->
+
+            <div class="batch-content-card">
+
+    				<div class="batch-card-heading">
+
+        				<h3>Topics</h3>
+
+        				<button
+            				type="button"
+            				class="add-topic-btn"
+            				onclick="openAddTopic()">
+            				+ Add Topic
+        				</button>
+
+    				</div>
+
+    				<div
+        				class="topics-list"
+        				id="topicsList">
+    				</div>
+
+			</div>
+			
+			<!-- ================================
+     			ADD TOPIC
+     		================================ -->
+
+			<div class="add-topic-card" id="addTopicCard">
+
+    				<div class="add-topic-header">
+
+        				<div>
+            				<p class="section-label">NEW TOPIC</p>
+            				<h3>Add Topic</h3>
+        				</div>
+
+        				<button
+            				type="button"
+           				class="close-add-topic-btn"
+            				onclick="closeAddTopic()">
+            				×
+        				</button>
+
+   		 			</div>
+
+    					<div class="add-topic-form">
+
+        					<div class="form-group">
+
+            					<label for="newTopicName">
+                					Topic Name
+            					</label>
+
+            					<input
+                					type="text"
+                					id="newTopicName"
+                					placeholder="e.g. Collections Framework">
+
+        						</div>
+
+        						<div class="add-topic-actions">
+
+            					<button
+                					type="button"
+                					class="cancel-topic-btn"
+                					onclick="closeAddTopic()">
+                					Cancel
+            					</button>
+
+            					<button
+                					type="button"
+                					class="save-topic-btn"
+                					onclick="addTopic()">
+                					Add Topic
+            					</button>
+
+        					</div>
+
+    					</div>
+
+				</div>
+
+		
+
+            <!-- Students -->
+
+            <div class="batch-content-card">
+
+                <div class="batch-card-heading">
+
+                    <h3>
+                        Students
+                    </h3>
+
+
+                    <button
+                        class="add-student-btn"
+                        onclick="openAddStudent()">
+
+                        + Add Student
+
+                    </button>
+
+                </div>
+
+
+                <div class="students-table">
+
+                    <div class="student-table-row student-table-header">
+
+                        <span>
+                            Student ID
+                        </span>
+
+                        <span>
+                            Student Name
+                        </span>
+
+                        <span>
+                            Status
+                        </span>
+
+                        <span>
+                            Action
+                        </span>
+
+                    </div>
+
+
+                    <div id="studentsList">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Add Student Form -->
+
+            <div
+                class="add-student-card"
+                id="addStudentCard"
+                style="display: none;">
+
+                <h3>
+                    Add New Student
+                </h3>
+
+
+                <div class="add-student-form">
+
+                    <div>
+
+                        <label>
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="newStudentId"
+                            placeholder="e.g. STU025">
+
+                    </div>
+
+
+                    <div>
+
+                        <label>
+                            Student Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="newStudentName"
+                            placeholder="Enter student name">
+
+                    </div>
+
+
+                    <button
+                        class="add-confirm-btn"
+                        onclick="addStudent()">
+
+                        Add Student
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>

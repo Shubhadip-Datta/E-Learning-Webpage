@@ -1,0 +1,2058 @@
+/* ================================
+   E-LEARN - LOGIN PAGE
+   ================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+/* ================================
+   THEME TOGGLE
+   ================================ */
+
+.theme-toggle {
+    position: fixed;
+    top: 25px;
+    right: 30px;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 9px 13px;
+
+    border: 1px solid #e1e5ec;
+    border-radius: 20px;
+
+    background: #ffffff;
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.theme-toggle:hover {
+    transform: translateY(-1px);
+}
+
+/* =================================
+   LIGHT MODE - LOGIN FORM
+   ================================= */
+
+body:not(.dark-mode) {
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+body:not(.dark-mode) .login-card {
+    background: #ffffff;
+}
+
+body:not(.dark-mode) .brand h1,
+body:not(.dark-mode) .welcome-text h2 {
+    color: #111827;
+}
+
+body:not(.dark-mode) .brand p,
+body:not(.dark-mode) .welcome-text p,
+body:not(.dark-mode) .login-footer {
+    color: #6b7280;
+}
+
+body:not(.dark-mode) .login-type {
+    background: #f1f3f6;
+}
+
+body:not(.dark-mode) .login-type-btn {
+    color: #6b7280;
+}
+
+body:not(.dark-mode) .login-type-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+}
+
+body:not(.dark-mode) .form-group label {
+    color: #374151;
+}
+
+body:not(.dark-mode) .form-group input {
+    background: #ffffff;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+body:not(.dark-mode) .form-group input::placeholder {
+    color: #9ca3af;
+}
+
+body:not(.dark-mode) .form-group input:focus {
+    border-color: #6366f1;
+}
+
+body:not(.dark-mode) .remember-me {
+    color: #6b7280;
+}
+
+body:not(.dark-mode) .theme-toggle {
+    background: #ffffff;
+    border-color: #e1e5ec;
+    color: #374151;
+}
+
+
+/* ================================
+   DARK MODE
+   ================================ */
+
+body.dark-mode {
+    background: #111827;
+    color: #f3f4f6;
+}
+
+body.dark-mode .login-card {
+    background: #1f2937;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode .brand h1,
+body.dark-mode .welcome-text h2 {
+    color: #f9fafb;
+}
+
+body.dark-mode .brand p,
+body.dark-mode .welcome-text p,
+body.dark-mode .login-footer {
+    color: #9ca3af;
+}
+
+body.dark-mode .login-type {
+    background: #111827;
+}
+
+body.dark-mode .login-type-btn {
+    color: #9ca3af;
+}
+
+body.dark-mode .login-type-btn.active {
+    background: #374151;
+    color: #a5b4fc;
+}
+
+body.dark-mode .form-group label {
+    color: #e5e7eb;
+}
+
+body.dark-mode .form-group input {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+}
+
+body.dark-mode .form-group input::placeholder {
+    color: #6b7280;
+}
+
+body.dark-mode .form-group input:focus {
+    border-color: #6366f1;
+}
+
+body.dark-mode .remember-me {
+    color: #9ca3af;
+}
+
+body.dark-mode .theme-toggle {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f3f4f6;
+}
+
+/* =================================
+   DARK MODE - AUTOFILL INPUT
+   ================================= */
+
+body.dark-mode .form-group input:-webkit-autofill,
+body.dark-mode .form-group input:-webkit-autofill:hover,
+body.dark-mode .form-group input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #f9fafb;
+    -webkit-box-shadow: 0 0 0 1000px #111827 inset;
+    box-shadow: 0 0 0 1000px #111827 inset;
+    border-color: #374151;
+    caret-color: #f9fafb;
+}
+
+/* ================================
+   LOGIN PAGE
+   ================================ */
+
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+
+/* ================================
+   LOGIN CARD
+   ================================ */
+
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    padding: 42px;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(31, 41, 55, 0.08);
+}
+
+
+/* ================================
+   BRAND
+   ================================ */
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 35px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #4f46e5;
+    color: white;
+
+    border-radius: 13px;
+
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.brand h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.brand p {
+    margin-top: 3px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* ================================
+   WELCOME TEXT
+   ================================ */
+
+.welcome-text {
+    margin-bottom: 25px;
+}
+
+.welcome-text h2 {
+    font-size: 25px;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+.welcome-text p {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+
+/* ================================
+   LOGIN TYPE
+   ================================ */
+
+.login-type {
+    display: flex;
+    background: #f3f4f6;
+    padding: 4px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.login-type-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 11px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #6b7280;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-type-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ================================
+   FORM
+   ================================ */
+
+.form-group {
+    margin-bottom: 19px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #374151;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 13px 14px;
+
+    border: 1px solid #d9dee7;
+    border-radius: 9px;
+
+    font-size: 14px;
+    outline: none;
+
+    transition: 0.2s;
+}
+
+.form-group input::placeholder {
+    color: #9ca3af;
+}
+
+.form-group input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+
+/* ================================
+   FORM OPTIONS
+   ================================ */
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 5px 0 24px;
+
+    font-size: 13px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #6b7280;
+}
+
+.remember-me input {
+    accent-color: #4f46e5;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+
+/* ================================
+   LOGIN BUTTON
+   ================================ */
+
+.login-btn {
+    width: 100%;
+    padding: 13px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #4f46e5;
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.login-btn:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+
+/* ================================
+   FOOTER
+   ================================ */
+
+.login-footer {
+    text-align: center;
+
+    margin-top: 28px;
+
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+
+/* ================================
+   MOBILE
+   ================================ */
+
+@media (max-width: 500px) {
+
+    .login-page {
+        padding: 18px;
+    }
+
+    .login-card {
+        padding: 30px 24px;
+        border-radius: 16px;
+    }
+
+    .welcome-text h2 {
+        font-size: 22px;
+    }
+
+}
+
+/* =================================
+   STUDENT DASHBOARD
+   ================================= */
+
+.dashboard {
+    min-height: 100vh;
+    display: flex;
+    background: #f5f7fb;
+}
+
+
+/* =================================
+   SIDEBAR
+   ================================= */
+
+.sidebar {
+    width: 245px;
+    min-height: 100vh;
+    background: #ffffff;
+    border-right: 1px solid #e8ebf1;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 28px 18px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 0 10px;
+    margin-bottom: 45px;
+}
+
+.sidebar-brand .brand-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+}
+
+.sidebar-brand h2 {
+    font-size: 19px;
+    color: #1f2937;
+}
+
+.sidebar-brand p {
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 2px;
+}
+
+
+/* Navigation */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 12px 14px;
+
+    border-radius: 9px;
+
+    color: #6b7280;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: 0.2s;
+}
+
+.nav-item span {
+    width: 20px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.nav-item:hover {
+    background: #f3f4f6;
+    color: #4f46e5;
+}
+
+.nav-item.active {
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+
+/* Sidebar bottom */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dashboard-theme {
+    position: static;
+    width: 100%;
+
+    justify-content: center;
+
+    margin: 0;
+}
+
+.logout-btn {
+    width: 100%;
+
+    padding: 11px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #6b7280;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* =================================
+   MAIN CONTENT
+   ================================= */
+
+.dashboard-content {
+    flex: 1;
+    padding: 38px 50px;
+
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+
+/* Header */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 30px;
+}
+
+.greeting {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.dashboard-header h1 {
+    font-size: 28px;
+    color: #111827;
+}
+
+.profile-circle,
+.large-profile-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+
+    background: #eef2ff;
+    color: #4f46e5;
+
+    font-weight: 700;
+}
+
+.profile-circle {
+    width: 45px;
+    height: 45px;
+    font-size: 16px;
+}
+
+.large-profile-circle {
+    width: 65px;
+    height: 65px;
+    font-size: 23px;
+}
+
+
+/* =================================
+   STUDENT PROFILE
+   ================================= */
+
+.student-profile {
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 16px;
+
+    padding: 24px 27px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 38px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-info h2 {
+    font-size: 19px;
+    color: #1f2937;
+    margin-bottom: 5px;
+}
+
+.profile-info p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.active-badge {
+    display: inline-block;
+
+    padding: 4px 9px;
+
+    border-radius: 20px;
+
+    background: #ecfdf5;
+    color: #059669;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.student-details {
+    display: flex;
+    gap: 55px;
+}
+
+.student-details div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.student-details span {
+    font-size: 11px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.student-details strong {
+    font-size: 13px;
+    color: #374151;
+}
+
+
+/* =================================
+   SECTIONS
+   ================================= */
+
+.dashboard-section {
+    margin-bottom: 38px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    margin-bottom: 18px;
+}
+
+.section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #6366f1;
+
+    margin-bottom: 5px;
+}
+
+.section-heading h2 {
+    font-size: 21px;
+    color: #1f2937;
+}
+
+.fee-summary {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+
+/* =================================
+   COURSE CARDS
+   ================================= */
+
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.course-card {
+    display: flex;
+    gap: 17px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 15px;
+
+    padding: 22px;
+
+    transition: 0.2s;
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(31, 41, 55, 0.07);
+}
+
+.course-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #eef2ff;
+    border-radius: 12px;
+
+    font-size: 22px;
+}
+
+.course-content h3 {
+    font-size: 16px;
+    color: #1f2937;
+    margin-bottom: 7px;
+}
+
+.course-content p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b7280;
+
+    margin-bottom: 15px;
+}
+
+.course-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    font-size: 11px;
+    color: #6b7280;
+}
+
+
+/* =================================
+   FEES
+   ================================= */
+
+.fees-card {
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+.fee-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+
+    align-items: center;
+
+    padding: 16px 22px;
+
+    border-bottom: 1px solid #eef0f4;
+
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.fee-row:last-child {
+    border-bottom: none;
+}
+
+.fee-header {
+    background: #fafbfc;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+
+    color: #9ca3af;
+}
+
+.status {
+    width: fit-content;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.status.paid {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.status.pending {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+
+/* =================================
+   DARK MODE
+   ================================= */
+
+body.dark-mode .dashboard {
+    background: #111827;
+}
+
+body.dark-mode .sidebar {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark-mode .sidebar-brand h2,
+body.dark-mode .dashboard-header h1,
+body.dark-mode .profile-info h2,
+body.dark-mode .section-heading h2,
+body.dark-mode .course-content h3 {
+    color: #f9fafb;
+}
+
+body.dark-mode .sidebar-brand p,
+body.dark-mode .greeting,
+body.dark-mode .profile-info p,
+body.dark-mode .student-details span,
+body.dark-mode .student-details strong,
+body.dark-mode .course-content p,
+body.dark-mode .course-meta,
+body.dark-mode .fee-summary {
+    color: #9ca3af;
+}
+
+body.dark-mode .nav-item {
+    color: #9ca3af;
+}
+
+body.dark-mode .nav-item:hover {
+    background: #374151;
+}
+
+body.dark-mode .nav-item.active {
+    background: #312e81;
+    color: #c7d2fe;
+}
+
+body.dark-mode .student-profile,
+body.dark-mode .course-card,
+body.dark-mode .fees-card {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark-mode .course-icon,
+body.dark-mode .profile-circle,
+body.dark-mode .large-profile-circle {
+    background: #312e81;
+}
+
+body.dark-mode .fee-header {
+    background: #18212f;
+}
+
+body.dark-mode .fee-row {
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+body.dark-mode .logout-btn {
+    color: #9ca3af;
+}
+
+body.dark-mode .logout-btn:hover {
+    background: #3f1d1d;
+    color: #f87171;
+}
+
+
+/* =================================
+   RESPONSIVE DESIGN
+   ================================= */
+
+@media (max-width: 900px) {
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .dashboard-content {
+        padding: 30px;
+    }
+
+    .student-profile {
+        align-items: flex-start;
+        gap: 25px;
+        flex-direction: column;
+    }
+
+    .student-details {
+        gap: 35px;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+
+        padding: 16px 20px;
+
+        border-right: none;
+        border-bottom: 1px solid #e8ebf1;
+    }
+
+    .sidebar-brand {
+        margin-bottom: 15px;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+    }
+
+    .nav-item {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .dashboard-content {
+        padding: 25px 20px;
+    }
+
+    .course-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .dashboard-header h1 {
+        font-size: 22px;
+    }
+
+    .student-details {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .fee-row {
+        grid-template-columns: 1.4fr 1fr 0.9fr;
+        padding: 14px;
+        font-size: 12px;
+    }
+
+    .fee-header {
+        font-size: 9px;
+    }
+
+}
+
+/* =================================
+   FACULTY DASHBOARD
+   ================================= */
+   
+   /* ================================
+   ADD BATCH BUTTON
+   ================================ */
+
+.add-batch-btn {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.add-batch-btn:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.add-batch-btn:active {
+    transform: translateY(0);
+}
+
+/* View Batch Button */
+
+.view-batch-btn {
+    border: none;
+    background: transparent;
+
+    color: #4f46e5;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    padding: 0;
+}
+
+.view-batch-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   BATCH DETAILS
+   ================================= */
+
+.batch-details-section {
+    margin-top: 20px;
+    padding-bottom: 40px;
+}
+
+.close-batch-btn {
+    border: 1px solid #e1e5ec;
+    background: #ffffff;
+
+    color: #6b7280;
+
+    padding: 8px 15px;
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.close-batch-btn:hover {
+    background: #f3f4f6;
+}
+
+
+/* =================================
+   BATCH INFORMATION
+   ================================= */
+
+.batch-info-card {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 15px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+}
+
+.batch-info-card div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.batch-info-card span {
+    font-size: 10px;
+
+    color: #9ca3af;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.batch-info-card strong {
+    font-size: 14px;
+    color: #374151;
+}
+
+
+/* =================================
+   BATCH CONTENT CARDS
+   ================================= */
+
+.batch-content-card {
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 15px;
+
+    margin-bottom: 18px;
+
+    overflow: hidden;
+}
+
+.batch-card-heading {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 22px;
+
+    border-bottom: 1px solid #eef0f4;
+}
+
+.batch-card-heading h3 {
+    font-size: 16px;
+    color: #1f2937;
+}
+
+
+/* =================================
+   TOPICS
+   ================================= */
+
+.topics-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+
+    padding: 20px 22px;
+}
+
+.topic-item {
+    padding: 7px 12px;
+
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =================================
+   ADD STUDENT BUTTON
+   ================================= */
+
+.add-student-btn {
+    border: none;
+
+    background: #4f46e5;
+    color: #ffffff;
+
+    padding: 8px 13px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.add-student-btn:hover {
+    background: #4338ca;
+}
+
+
+/* =================================
+   STUDENTS TABLE
+   ================================= */
+
+.students-table {
+    width: 100%;
+}
+
+.student-table-row {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.5fr
+        1fr
+        0.8fr;
+
+    align-items: center;
+
+    padding: 14px 22px;
+
+    border-bottom: 1px solid #eef0f4;
+
+    font-size: 13px;
+}
+
+.student-table-row:last-child {
+    border-bottom: none;
+}
+
+.student-table-header {
+    background: #fafbfc;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: #9ca3af;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* Student Status */
+
+.student-status {
+    width: fit-content;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+.student-status.active {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.student-status.inactive {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* Remove Student */
+
+.remove-student-btn {
+    border: none;
+
+    background: transparent;
+
+    color: #dc2626;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.remove-student-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   ADD STUDENT FORM
+   ================================= */
+
+.add-student-card {
+    background: #ffffff;
+
+    border: 1px solid #e8ebf1;
+    border-radius: 15px;
+
+    padding: 22px;
+
+    margin-bottom: 20px;
+}
+
+.add-student-card h3 {
+    font-size: 16px;
+
+    color: #1f2937;
+
+    margin-bottom: 18px;
+}
+
+.add-student-form {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.5fr
+        auto;
+
+    align-items: end;
+
+    gap: 15px;
+}
+
+.add-student-form div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.add-student-form label {
+    font-size: 11px;
+
+    font-weight: 600;
+
+    color: #6b7280;
+}
+
+.add-student-form input {
+    padding: 11px 12px;
+
+    border: 1px solid #d9dee7;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    outline: none;
+}
+
+.add-student-form input:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(99, 102, 241, 0.10);
+}
+
+.add-confirm-btn {
+    padding: 11px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #4f46e5;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.add-confirm-btn:hover {
+    background: #4338ca;
+}
+
+
+/* =================================
+   FACULTY DARK MODE
+   ================================= */
+
+body.dark-mode .close-batch-btn {
+    background: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+body.dark-mode .close-batch-btn:hover {
+    background: #374151;
+}
+
+body.dark-mode .batch-info-card,
+body.dark-mode .batch-content-card,
+body.dark-mode .add-student-card {
+    background: #1f2937;
+    border-color: #374151;
+}
+
+body.dark-mode .batch-info-card strong,
+body.dark-mode .batch-card-heading h3,
+body.dark-mode .add-student-card h3 {
+    color: #f9fafb;
+}
+
+body.dark-mode .batch-card-heading {
+    border-color: #374151;
+}
+
+body.dark-mode .topic-item {
+    background: #312e81;
+    color: #c7d2fe;
+}
+
+body.dark-mode .student-table-row {
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+body.dark-mode .student-table-header {
+    background: #18212f;
+}
+
+body.dark-mode .student-status.inactive {
+    background: #374151;
+    color: #9ca3af;
+}
+
+body.dark-mode .add-student-form label {
+    color: #9ca3af;
+}
+
+body.dark-mode .add-student-form input {
+    background: #111827;
+    border-color: #374151;
+    color: #f9fafb;
+}
+
+	/* add batch dark mode*/
+body.dark-mode .add-batch-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+body.dark-mode .add-batch-form .form-group label {
+    color: #e2e8f0;
+}
+
+body.dark-mode .add-batch-form .form-group input {
+    background: #111827;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+body.dark-mode .close-add-batch-btn {
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+body.dark-mode .close-add-batch-btn:hover {
+    background: #334155;
+    color: white;
+}
+	/*add topic dark mode*/
+
+body.dark-mode .add-topic-card {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+body.dark-mode .add-topic-header h3 {
+    color: #f9fafb;
+}
+
+body.dark-mode .add-topic-form .form-group label {
+    color: #e2e8f0;
+}
+
+body.dark-mode .add-topic-form .form-group input {
+    background: #111827;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+body.dark-mode .close-add-topic-btn {
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+body.dark-mode .close-add-topic-btn:hover {
+    background: #334155;
+    color: white;
+}
+
+/* =================================
+   FACULTY RESPONSIVE DESIGN
+   ================================= */
+
+@media (max-width: 800px) {
+
+    .batch-info-card {
+        grid-template-columns: 1fr;
+    }
+
+    .add-student-form {
+        grid-template-columns: 1fr;
+    }
+
+    .student-table-row {
+        grid-template-columns:
+            1fr
+            1.4fr
+            1fr
+            0.8fr;
+
+        padding: 13px 15px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .student-table-row {
+        grid-template-columns:
+            1fr
+            1.3fr
+            0.8fr;
+    }
+
+    .student-table-row span:nth-child(4) {
+        display: none;
+    }
+
+    .student-table-header span:nth-child(4) {
+        display: none;
+    }
+
+}
+
+/* =================================
+   ADD BATCH FORM
+   ================================= */
+
+.add-batch-card {
+    display: none;
+    margin-top: 25px;
+    padding: 24px;
+    border: 1px solid #e8ebf1;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.add-batch-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.add-batch-header h3 {
+    margin: 4px 0 0;
+    font-size: 22px;
+}
+
+
+/* Close X button */
+
+.close-add-batch-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: transparent;
+    color: #6b7280;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.close-add-batch-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+
+/* Form */
+
+.add-batch-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.add-batch-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.add-batch-form .form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.add-batch-form .form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #111827;
+    font-size: 14px;
+    outline: none;
+}
+
+.add-batch-form .form-group input:focus {
+    border-color: #4f46e5;
+}
+
+/* Date fields side-by-side */
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+
+/* Buttons */
+
+.add-batch-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.cancel-batch-btn {
+    padding: 10px 18px;
+    border: 1px solid #475569;
+    border-radius: 9px;
+    background: transparent;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-batch-btn:hover {
+    background: #334155;
+    color: white;
+}
+
+.save-batch-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #4f46e5;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-batch-btn:hover {
+    background: #4338ca;
+}
+
+/* =================================
+   ADD BATCH FORM
+   ================================= */
+
+.add-batch-card {
+    display: none;
+}
+
+/* =================================
+   BATCH ACTIONS
+   ================================= */
+
+.batch-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.edit-batch-btn {
+    border: none;
+    background: transparent;
+    color: #60a5fa;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.edit-batch-btn:hover {
+    text-decoration: underline;
+    color: #3b82f6;
+}
+
+.remove-batch-btn {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+}
+
+.remove-batch-btn:hover {
+    text-decoration: underline;
+    color: #dc2626;
+}
+
+/* =================================
+   TOPIC MANAGEMENT
+   ================================= */
+
+.batch-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-topic-btn {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.add-topic-btn:hover {
+    background: #4338ca;
+    transform: translateY(-1px);
+}
+
+.add-topic-btn:active {
+    transform: translateY(0);
+}
+
+/* =================================
+   ADD TOPIC FORM
+   ================================= */
+
+.add-topic-card {
+    display: none;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    padding: 24px;
+    border: 1px solid #e8ebf1;
+    border-radius: 16px;
+    background: #ffffff;
+}
+
+.add-topic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.add-topic-header h3 {
+    margin: 4px 0 0;
+    font-size: 20px;
+    color: #1f2937;
+}
+
+
+/* Close button */
+
+.close-add-topic-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: transparent;
+    color: #6b7280;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.close-add-topic-btn:hover {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+
+/* Form */
+
+.add-topic-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.add-topic-form .form-group label {
+    color: #374151;
+}
+
+.add-topic-form .form-group input {
+    background: #ffffff;
+    border: 1px solid #d9dee7;
+    color: #111827;
+}
+
+/* Buttons */
+
+.add-topic-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancel-topic-btn {
+    padding: 10px 18px;
+    border: 1px solid #475569;
+    border-radius: 9px;
+    background: transparent;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-topic-btn:hover {
+    background: #334155;
+    color: white;
+}
+
+.save-topic-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 9px;
+    background: #4f46e5;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.save-topic-btn:hover {
+    background: #4338ca;
+}
+
+/* =================================
+   TOPIC MANAGEMENT
+   ================================= */
+
+.topic-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    margin: 0 8px 8px 0;
+    padding: 9px 12px 9px 15px;
+
+    border-radius: 20px;
+    border: 1px solid #3b3b91;
+
+    background: #312e81;
+
+    white-space: nowrap;
+}
+
+.topic-name {
+    color: #c7d2fe;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* Topic action buttons */
+
+.topic-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.edit-topic-btn,
+.remove-topic-btn {
+    border: none;
+    background: transparent;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    cursor: pointer;
+    padding: 2px 0;
+}
+
+
+/* Edit */
+
+.edit-topic-btn {
+    color: #93c5fd;
+}
+
+.edit-topic-btn:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Remove */
+
+.remove-topic-btn {
+    color: #f87171;
+}
+
+.remove-topic-btn:hover {
+    color: #fecaca;
+    text-decoration: underline;
+}
+
+/* =================================
+   TOPIC COVERED CHECK
+   ================================= */
+
+.topic-check {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.topic-check input {
+    display: none;
+}
+
+.checkmark {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #777;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: transparent;
+    transition: 0.2s ease;
+}
+
+.topic-check input:checked + .checkmark {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+.topic-check:hover .checkmark {
+    transform: scale(1.08);
+}
+
+/* Completed topic */
+.topic-covered {
+    opacity: 0.65;
+    text-decoration: line-through;
+}
+

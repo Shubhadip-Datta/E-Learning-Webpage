@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>E-Learn | Student Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <!-- Sidebar -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-brand">
+                <div class="brand-icon">E</div>
+
+                <div>
+                    <h2>E-Learn</h2>
+                    <p>Learning Portal</p>
+                </div>
+            </div>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="#" class="nav-item active">
+                    <span>⌂</span>
+                    Dashboard
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span>▣</span>
+                    My Courses
+                </a>
+
+                <a href="#" class="nav-item">
+                    <span>₹</span>
+                    Fees
+                </a>
+
+            </nav>
+
+
+            <div class="sidebar-bottom">
+
+                <button class="theme-toggle dashboard-theme" id="themeToggle" type="button">
+                    <span id="themeIcon">☀️</span>
+                    <span id="themeText">Light</span>
+                </button>
+
+                <button class="logout-btn" id="logoutBtn">
+                    <span>↪</span>
+                    Logout
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Main Content -->
+
+        <main class="dashboard-content">
+
+            <header class="dashboard-header">
+
+                <div>
+                    <p class="greeting">Good morning 👋</p>
+                    <h1>Welcome back, Rahul!</h1>
+                </div>
+
+                <div class="profile-circle">
+                    R
+                </div>
+
+            </header>
+
+
+            <!-- Student Information -->
+
+            <section class="student-profile">
+
+                <div class="profile-info">
+
+                    <div class="large-profile-circle">
+                        R
+                    </div>
+
+                    <div>
+                        <h2>Rahul Das</h2>
+                        <p>Student ID: STU001</p>
+                        <span class="active-badge">Active Student</span>
+                    </div>
+
+                </div>
+
+
+                <div class="student-details">
+
+                    <div>
+                        <span>Batch</span>
+                        <strong>Java Morning Batch</strong>
+                    </div>
+
+                    <div>
+                        <span>Faculty</span>
+                        <strong>Arindam Sen</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Courses -->
+
+            <section class="dashboard-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <p class="section-label">LEARNING</p>
+                        <h2>My Courses</h2>
+                    </div>
+
+                </div>
+
+
+                <div class="course-grid">
+
+                    <div class="course-card">
+
+                        <div class="course-icon">
+                            ☕
+                        </div>
+
+                        <div class="course-content">
+
+                            <h3>Java Programming</h3>
+
+                            <p>
+                                Learn Java programming, OOP,
+                                collections and more.
+                            </p>
+
+                            <div class="course-meta">
+                                <span>Java Morning Batch</span>
+                                <span>₹1,500 / month</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="course-card">
+
+                        <div class="course-icon">
+                            🗄️
+                        </div>
+
+                        <div class="course-content">
+
+                            <h3>Database Management</h3>
+
+                            <p>
+                                Learn SQL, database design,
+                                normalization and queries.
+                            </p>
+
+                            <div class="course-meta">
+                                <span>DBMS Evening Batch</span>
+                                <span>₹1,200 / month</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Fees -->
+
+            <section class="dashboard-section">
+
+                <div class="section-heading">
+
+                    <div>
+                        <p class="section-label">PAYMENTS</p>
+                        <h2>Monthly Fees</h2>
+                    </div>
+
+                    <span class="fee-summary">
+                        Monthly Fee: ₹2,700
+                    </span>
+
+                </div>
+
+
+                <div class="fees-card">
+
+                    <div class="fee-row fee-header">
+
+                        <span>Month</span>
+                        <span>Amount</span>
+                        <span>Status</span>
+
+                    </div>
+
+
+                    <div class="fee-row">
+
+                        <span>August 2026</span>
+
+                        <span>₹2,700</span>
+
+                        <span class="status paid">
+                            Paid
+                        </span>
+
+                    </div>
+
+
+                    <div class="fee-row">
+
+                        <span>September 2026</span>
+
+                        <span>₹2,700</span>
+
+                        <span class="status paid">
+                            Paid
+                        </span>
+
+                    </div>
+
+
+                    <div class="fee-row">
+
+                        <span>October 2026</span>
+
+                        <span>₹2,700</span>
+
+                        <span class="status pending">
+                            Pending
+                        </span>
+
+                    </div>
+
+
+                    <div class="fee-row">
+
+                        <span>November 2026</span>
+
+                        <span>₹2,700</span>
+
+                        <span class="status pending">
+                            Pending
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
