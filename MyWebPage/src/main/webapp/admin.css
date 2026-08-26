@@ -1,0 +1,2067 @@
+/* =================================
+   E-LEARN ADMIN DASHBOARD
+   DARK ONLY
+   ================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #08111f;
+    --sidebar: #0b1626;
+    --panel: #101c2d;
+    --panel-soft: #162235;
+    --panel-hover: #1b2940;
+    --border: #293950;
+
+    --text: #f3f6fb;
+    --muted: #9aa8bb;
+    --muted-light: #c5cfdd;
+
+    --purple: #635bff;
+    --purple-hover: #5148ee;
+    --purple-soft: #29265f;
+
+    --green: #20e6a2;
+    --green-bg: #064f3b;
+
+    --red: #ff6268;
+    --gray-badge: #2b394d;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* =================================
+   LAYOUT
+   ================================= */
+
+.admin-dashboard {
+    min-height: 100vh;
+    display: flex;
+    background: var(--bg);
+}
+
+
+/* =================================
+   SIDEBAR
+   ================================= */
+
+.admin-sidebar {
+    width: 250px;
+    min-height: 100vh;
+
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 28px 16px 18px;
+
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 0 10px 28px;
+    border-bottom: 1px solid #1d2b3e;
+}
+
+.admin-brand-icon {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: var(--purple);
+    color: white;
+
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.admin-sidebar-brand h2 {
+    color: var(--text);
+    font-size: 19px;
+}
+
+.admin-sidebar-brand p {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* Navigation */
+
+.admin-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    padding-top: 25px;
+}
+
+.admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 46px;
+    padding: 0 14px;
+
+    border-radius: 9px;
+
+    color: var(--muted-light);
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: 0.2s;
+}
+
+.admin-nav-item span {
+    width: 20px;
+    text-align: center;
+    font-size: 17px;
+}
+
+.admin-nav-item:hover {
+    background: var(--panel-soft);
+    color: white;
+}
+
+.admin-nav-item.active {
+    background: #242250;
+    color: white;
+    box-shadow: inset 3px 0 0 var(--purple);
+}
+
+
+/* Sidebar bottom */
+
+.admin-sidebar-bottom {
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid #1d2b3e;
+}
+
+.admin-sidebar-admin {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px;
+    margin-bottom: 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: #101c2d;
+}
+
+.admin-avatar {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--purple);
+    color: white;
+
+    font-weight: 700;
+}
+
+.admin-sidebar-admin strong,
+.admin-sidebar-admin span {
+    display: block;
+}
+
+.admin-sidebar-admin strong {
+    font-size: 13px;
+}
+
+.admin-sidebar-admin span {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.admin-logout-btn {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border: none;
+    background: transparent;
+    color: #ff7278;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+}
+
+.admin-logout-btn:hover {
+    background: #2a1b24;
+}
+
+
+/* =================================
+   MAIN CONTENT
+   ================================= */
+
+.admin-content {
+    flex: 1;
+    min-width: 0;
+
+    padding: 38px 42px 55px;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    max-width: 1260px;
+    margin: 0 auto 38px;
+}
+
+.admin-greeting {
+    margin-bottom: 6px;
+
+    color: #918aff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.admin-header h1 {
+    font-size: 27px;
+    color: white;
+}
+
+.admin-profile-circle {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--purple);
+    color: white;
+
+    font-weight: 700;
+}
+
+
+/* =================================
+   SECTIONS
+   ================================= */
+
+.admin-section {
+    max-width: 1260px;
+    margin: 0 auto 35px;
+}
+
+.admin-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.admin-section-label {
+    margin-bottom: 6px;
+
+    color: #8f88ff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.admin-section-heading h2 {
+    color: white;
+    font-size: 27px;
+}
+
+
+/* =================================
+   OVERVIEW CARDS
+   ================================= */
+
+.admin-overview {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.admin-card {
+    position: relative;
+
+    min-height: 180px;
+
+    padding: 21px;
+
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    overflow: hidden;
+    transition: 0.2s;
+}
+
+.admin-card:hover {
+    transform: translateY(-2px);
+    background: var(--panel-hover);
+}
+
+.admin-card-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: var(--purple-soft);
+    color: #a7a2ff;
+
+    font-size: 15px;
+}
+
+.admin-card-label {
+    display: block;
+
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.admin-card h2 {
+    margin: 12px 0 5px;
+
+    color: white;
+    font-size: 31px;
+}
+
+.admin-card p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.admin-view-btn {
+    margin-top: 20px;
+
+    padding: 0;
+
+    border: none;
+    background: transparent;
+
+    color: #958fff;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-view-btn:hover {
+    color: #b2adff;
+}
+
+
+/* =================================
+   STUDENT HEADING BUTTONS
+   ================================= */
+
+.admin-student-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-add-btn {
+    border: none;
+    border-radius: 9px;
+
+    padding: 11px 17px;
+
+    background: var(--purple);
+    color: white;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    box-shadow: 0 7px 20px rgba(99, 91, 255, 0.2);
+}
+
+.admin-add-btn:hover {
+    background: var(--purple-hover);
+}
+
+.admin-close-btn {
+    padding: 10px 18px;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    background: var(--panel);
+    color: var(--muted-light);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.admin-close-btn:hover {
+    background: var(--panel-hover);
+    color: white;
+}
+
+
+/* =================================
+   ADD STUDENT CARD
+   ================================= */
+
+.admin-add-student-card {
+    margin-bottom: 18px;
+
+    padding: 22px;
+
+    background: linear-gradient(
+        135deg,
+        #101c2d,
+        #0d1929
+    );
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.admin-add-student-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.admin-add-student-header h3 {
+    color: white;
+    font-size: 18px;
+}
+
+.admin-add-close-btn {
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: transparent;
+    color: var(--muted-light);
+
+    font-size: 21px;
+}
+
+.admin-add-close-btn:hover {
+    background: var(--panel-hover);
+    color: white;
+}
+
+.admin-add-student-form {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1.2fr auto;
+
+    gap: 14px;
+    align-items: end;
+}
+
+.admin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.admin-form-group label {
+    color: var(--muted-light);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.admin-form-group input {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    outline: none;
+
+    background: #0b1626;
+    color: white;
+
+    font-size: 13px;
+}
+
+.admin-form-group input::placeholder {
+    color: #637186;
+}
+
+.admin-form-group input:focus {
+    border-color: var(--purple);
+}
+
+.admin-add-student-actions {
+    display: flex;
+    gap: 9px;
+}
+
+.admin-cancel-btn,
+.admin-save-btn {
+    padding: 10px 15px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-cancel-btn {
+    border: 1px solid var(--border);
+    background: var(--panel-soft);
+    color: var(--muted-light);
+}
+
+.admin-save-btn {
+    border: none;
+    background: var(--purple);
+    color: white;
+}
+
+.admin-cancel-btn:hover {
+    background: var(--panel-hover);
+}
+
+.admin-save-btn:hover {
+    background: var(--purple-hover);
+}
+
+
+/* =================================
+   STUDENT TABLE CARD
+   ================================= */
+
+.admin-students-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+.admin-students-toolbar {
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 14px 20px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-student-count {
+    color: var(--muted-light);
+    font-size: 13px;
+}
+
+.admin-student-count strong {
+    margin-left: 4px;
+    color: #8f88ff;
+    font-size: 15px;
+}
+
+.admin-search {
+    width: 250px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 9px 11px;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    background: #0c1727;
+}
+
+.admin-search span {
+    color: #74839a;
+    font-size: 18px;
+}
+
+.admin-search input {
+    width: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: white;
+
+    font-size: 12px;
+}
+
+.admin-search input::placeholder {
+    color: #64748b;
+}
+
+
+/* =================================
+   TABLE
+   ================================= */
+
+.admin-students-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-student-row {
+    display: grid;
+
+    grid-template-columns:
+        120px
+        minmax(170px, 1.25fr)
+        minmax(180px, 1.3fr)
+        105px
+        190px;
+
+    align-items: center;
+
+    min-width: 765px;
+    min-height: 62px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid var(--border);
+
+    color: #dbe2ec;
+    font-size: 13px;
+}
+
+.admin-student-row:last-child {
+    border-bottom: none;
+}
+
+.admin-student-header {
+    min-height: 50px;
+
+    background: #142033;
+
+    color: #9aa8bb;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.admin-student-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.admin-student-status.active {
+    background: var(--green-bg);
+    color: var(--green);
+}
+
+.admin-student-status.inactive {
+    background: var(--gray-badge);
+    color: #b3bfce;
+}
+
+.admin-student-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-status-btn,
+.admin-remove-btn {
+    padding: 4px 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.admin-status-btn.deactivate {
+    color: var(--red);
+}
+
+.admin-status-btn.activate {
+    color: var(--green);
+}
+
+.admin-remove-btn {
+    color: var(--red);
+}
+
+.admin-status-btn:hover,
+.admin-remove-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   TABLE FOOTER
+   ================================= */
+
+.admin-table-footer {
+    padding: 15px 20px;
+
+    border-top: 1px solid var(--border);
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+
+@media (max-width: 1100px) {
+
+    .admin-overview {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-add-student-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-add-student-actions {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .admin-sidebar {
+        width: 210px;
+    }
+
+    .admin-content {
+        padding: 30px 24px 45px;
+    }
+}
+
+@media (max-width: 680px) {
+
+    .admin-dashboard {
+        display: block;
+    }
+
+    .admin-sidebar {
+        position: static;
+
+        width: 100%;
+        min-height: auto;
+
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .admin-sidebar-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .admin-nav-item {
+        flex: 0 0 auto;
+    }
+
+    .admin-sidebar-bottom {
+        display: none;
+    }
+
+    .admin-content {
+        padding: 25px 16px 40px;
+    }
+
+    .admin-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-student-heading-actions {
+        width: 100%;
+    }
+
+    .admin-add-btn,
+    .admin-close-btn {
+        flex: 1;
+    }
+
+    .admin-add-student-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-add-student-actions {
+        justify-content: flex-end;
+    }
+
+    .admin-search {
+        width: 100%;
+    }
+
+    .admin-students-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+/* =================================
+   FACULTY MANAGEMENT UI
+   ================================= */
+
+.admin-faculty-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =================================
+   ADD FACULTY CARD
+   ================================= */
+
+.admin-add-faculty-card {
+    margin-bottom: 18px;
+
+    padding: 22px;
+
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+}
+
+.admin-add-faculty-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.admin-add-faculty-header h3 {
+    color: #ffffff;
+
+    font-size: 18px;
+}
+
+
+/* =================================
+   ADD FACULTY FORM
+   ================================= */
+
+.admin-add-faculty-form {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.2fr
+        1.2fr;
+
+    gap: 15px;
+}
+
+.admin-add-faculty-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+}
+
+
+/* =================================
+   FACULTY TABLE
+   ================================= */
+
+.admin-faculty-card {
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+
+/* Toolbar */
+
+.admin-faculty-toolbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #293950;
+}
+
+.admin-faculty-count {
+    color: #9aa8bb;
+
+    font-size: 13px;
+}
+
+.admin-faculty-count strong {
+    color: #918aff;
+
+    margin-left: 4px;
+}
+
+
+/* =================================
+   FACULTY TABLE ROW
+   ================================= */
+
+.admin-faculty-table {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.admin-faculty-row {
+    display: grid;
+
+    grid-template-columns:
+        120px
+        minmax(170px, 1.3fr)
+        minmax(150px, 1.2fr)
+        100px
+        190px;
+
+    align-items: center;
+
+    min-width: 730px;
+
+    min-height: 62px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #293950;
+
+    color: #dbe2ec;
+
+    font-size: 13px;
+}
+
+.admin-faculty-row:last-child {
+    border-bottom: none;
+}
+
+
+/* Header */
+
+.admin-faculty-header {
+    min-height: 50px;
+
+    background: #142033;
+
+    color: #9aa8bb;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =================================
+   FACULTY STATUS
+   ================================= */
+
+.admin-faculty-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.admin-faculty-status.active {
+    background: #064f3b;
+
+    color: #20e6a2;
+}
+
+.admin-faculty-status.inactive {
+    background: #2b394d;
+
+    color: #b3bfce;
+}
+
+
+/* =================================
+   FACULTY ACTIONS
+   ================================= */
+
+.admin-faculty-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.admin-faculty-status-btn,
+.admin-faculty-remove-btn {
+    padding: 4px 0;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-faculty-status-btn.deactivate,
+.admin-faculty-remove-btn {
+    color: #ff6268;
+}
+
+.admin-faculty-status-btn.activate {
+    color: #20e6a2;
+}
+
+.admin-faculty-status-btn:hover,
+.admin-faculty-remove-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+
+@media (max-width: 800px) {
+
+    .admin-add-faculty-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-faculty-toolbar {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-faculty-heading-actions {
+        width: 100%;
+    }
+
+    .admin-faculty-heading-actions
+    .admin-add-btn,
+    .admin-faculty-heading-actions
+    .admin-close-btn {
+        flex: 1;
+    }
+
+    .admin-add-faculty-form {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =================================
+   BATCH MANAGEMENT UI
+   ================================= */
+
+.admin-batch-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =================================
+   ADD BATCH CARD
+   ================================= */
+
+.admin-add-batch-card {
+    margin-bottom: 18px;
+    padding: 22px;
+
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+}
+
+.admin-add-batch-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.admin-add-batch-header h3 {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+
+/* =================================
+   ADD BATCH FORM
+   ================================= */
+
+.admin-add-batch-form {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.4fr
+        1fr
+        1.2fr
+        1fr;
+
+    gap: 15px;
+}
+
+.admin-add-batch-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+}
+
+
+/* =================================
+   BATCH TABLE
+   ================================= */
+
+.admin-batches-card {
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+.admin-batches-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #293950;
+}
+
+.admin-batch-count {
+    color: #9aa8bb;
+    font-size: 13px;
+}
+
+.admin-batch-count strong {
+    color: #918aff;
+    margin-left: 4px;
+}
+
+
+/* =================================
+   BATCH TABLE ROWS
+   ================================= */
+
+.admin-batches-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-batch-row {
+    display: grid;
+
+    grid-template-columns:
+        90px
+        minmax(170px, 1.4fr)
+        minmax(110px, 1fr)
+        minmax(140px, 1.2fr)
+        120px
+        90px
+        170px;
+
+    align-items: center;
+
+    min-width: 900px;
+    min-height: 62px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #293950;
+
+    color: #dbe2ec;
+
+    font-size: 13px;
+}
+
+.admin-batch-row:last-child {
+    border-bottom: none;
+}
+
+
+/* Header */
+
+.admin-batch-header {
+    min-height: 50px;
+
+    background: #142033;
+
+    color: #9aa8bb;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =================================
+   MONTHLY FEE
+   ================================= */
+
+.admin-batch-fee {
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+.admin-batch-fee::before {
+    content: "₹";
+    margin-right: 2px;
+
+    color: #918aff;
+}
+
+
+/* =================================
+   BATCH STATUS
+   ================================= */
+
+.admin-batch-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.admin-batch-status.active {
+    background: #064f3b;
+    color: #20e6a2;
+}
+
+.admin-batch-status.inactive {
+    background: #2b394d;
+    color: #b3bfce;
+}
+
+
+/* =================================
+   BATCH ACTIONS
+   ================================= */
+
+.admin-batch-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.admin-batch-action-btn,
+.admin-batch-remove-btn {
+    padding: 4px 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-batch-action-btn {
+    color: #918aff;
+}
+
+.admin-batch-status-btn.deactivate {
+    color: #ff6268;
+}
+
+.admin-batch-status-btn.activate {
+    color: #20e6a2;
+}
+
+.admin-batch-remove-btn {
+    color: #ff6268;
+}
+
+.admin-batch-action-btn:hover,
+.admin-batch-status-btn:hover,
+.admin-batch-remove-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+
+@media (max-width: 1000px) {
+
+    .admin-add-batch-form {
+        grid-template-columns:
+            1fr
+            1fr;
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .admin-batch-heading-actions {
+        width: 100%;
+    }
+
+    .admin-batch-heading-actions
+    .admin-add-btn,
+    .admin-batch-heading-actions
+    .admin-close-btn {
+        flex: 1;
+    }
+
+    .admin-add-batch-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-batches-toolbar {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+}
+/* =================================
+   BATCH STATUS ACTION BUTTON
+   ================================= */
+
+.admin-batch-status-btn {
+    padding: 4px 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-batch-status-btn.deactivate {
+    color: #ff6268;
+}
+
+.admin-batch-status-btn.activate {
+    color: #20e6a2;
+}
+
+.admin-batch-status-btn:hover {
+    text-decoration: underline;
+}
+
+/* =================================
+   COURSE MANAGEMENT UI
+   ================================= */
+
+.admin-course-heading-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* =================================
+   ADD COURSE CARD
+   ================================= */
+
+.admin-add-course-card {
+    margin-bottom: 18px;
+    padding: 22px;
+
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+}
+
+.admin-add-course-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.admin-add-course-header h3 {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+
+/* =================================
+   ADD COURSE FORM
+   ================================= */
+
+.admin-add-course-form {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1.3fr
+        2fr;
+
+    gap: 15px;
+}
+
+.admin-add-course-actions {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+}
+
+
+/* =================================
+   COURSE TABLE
+   ================================= */
+
+.admin-courses-card {
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+.admin-courses-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #293950;
+}
+
+.admin-course-count {
+    color: #9aa8bb;
+    font-size: 13px;
+}
+
+.admin-course-count strong {
+    color: #918aff;
+    margin-left: 4px;
+}
+
+
+/* =================================
+   COURSE TABLE ROWS
+   ================================= */
+
+.admin-courses-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-course-row {
+    display: grid;
+
+    grid-template-columns:
+        100px
+        minmax(180px, 1.3fr)
+        minmax(250px, 2fr)
+        100px
+        180px;
+
+    align-items: center;
+
+    min-width: 800px;
+    min-height: 62px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #293950;
+
+    color: #dbe2ec;
+
+    font-size: 13px;
+}
+
+.admin-course-row:last-child {
+    border-bottom: none;
+}
+
+
+/* Header */
+
+.admin-course-header {
+    min-height: 50px;
+
+    background: #142033;
+
+    color: #9aa8bb;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =================================
+   COURSE DESCRIPTION
+   ================================= */
+
+.admin-course-description {
+    color: #8f9db0;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    max-width: 100%;
+}
+
+
+/* =================================
+   COURSE STATUS
+   ================================= */
+
+.admin-course-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 62px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.admin-course-status.active {
+    background: #064f3b;
+    color: #20e6a2;
+}
+
+.admin-course-status.inactive {
+    background: #2b394d;
+    color: #b3bfce;
+}
+
+
+/* =================================
+   COURSE ACTIONS
+   ================================= */
+
+.admin-course-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+.admin-course-edit-btn,
+.admin-course-status-btn,
+.admin-course-remove-btn {
+    padding: 4px 0;
+
+    border: none;
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-course-edit-btn {
+    color: #918aff;
+}
+
+.admin-course-status-btn.deactivate,
+.admin-course-remove-btn {
+    color: #ff6268;
+}
+
+.admin-course-status-btn.activate {
+    color: #20e6a2;
+}
+
+.admin-course-edit-btn:hover,
+.admin-course-status-btn:hover,
+.admin-course-remove-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+
+@media (max-width: 850px) {
+
+    .admin-add-course-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .admin-course-heading-actions {
+        width: 100%;
+    }
+
+    .admin-course-heading-actions
+    .admin-add-btn,
+    .admin-course-heading-actions
+    .admin-close-btn {
+        flex: 1;
+    }
+
+    .admin-add-course-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-courses-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+}
+/* =================================
+   PAYMENTS MANAGEMENT UI
+   ================================= */
+
+.admin-payment-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-payment-summary-card {
+    padding: 20px;
+
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+}
+
+
+.admin-payment-summary-card h3 {
+    margin-top: 10px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+}
+
+
+/* =================================
+   PAYMENTS TABLE
+   ================================= */
+
+.admin-payments-card {
+    background: #101c2d;
+
+    border: 1px solid #293950;
+    border-radius: 15px;
+
+    overflow: hidden;
+}
+
+
+.admin-payments-toolbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    padding: 15px 20px;
+
+    border-bottom: 1px solid #293950;
+}
+
+
+.admin-payment-filter select,
+.admin-payment-status-filter select {
+    height: 42px;
+
+    padding: 0 35px 0 12px;
+
+    border: 1px solid #293950;
+    border-radius: 9px;
+
+    background: #0b1626;
+
+    color: #aebbd0;
+
+    font-size: 13px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+
+.admin-payment-filter select:focus,
+.admin-payment-status-filter select:focus {
+    border-color: #6558f5;
+}
+
+
+/* =================================
+   PAYMENT TABLE ROWS
+   ================================= */
+
+.admin-payments-table {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.admin-payment-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(170px, 1.3fr)
+        minmax(160px, 1.2fr)
+        130px
+        110px
+        100px
+        150px;
+
+    align-items: center;
+
+    min-width: 850px;
+
+    min-height: 62px;
+
+    padding: 0 20px;
+
+    border-bottom: 1px solid #293950;
+
+    color: #dbe2ec;
+
+    font-size: 13px;
+}
+
+
+.admin-payment-row:last-child {
+    border-bottom: none;
+}
+
+
+/* =================================
+   PAYMENT HEADER
+   ================================= */
+
+.admin-payment-header {
+    min-height: 50px;
+
+    background: #142033;
+
+    color: #9aa8bb;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+/* =================================
+   PAYMENT STATUS
+   ================================= */
+
+.admin-payment-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 65px;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.admin-payment-status.paid {
+    background: #064f3b;
+
+    color: #20e6a2;
+}
+
+
+.admin-payment-status.pending {
+    background: #493914;
+
+    color: #f5c451;
+}
+
+
+/* =================================
+   PAYMENT AMOUNT
+   ================================= */
+
+.admin-payment-amount {
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+
+/* =================================
+   PAYMENT ACTIONS
+   ================================= */
+
+.admin-payment-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.admin-payment-view-btn,
+.admin-payment-verify-btn {
+    padding: 4px 0;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.admin-payment-view-btn {
+    color: #918aff;
+}
+
+
+.admin-payment-verify-btn {
+    color: #20e6a2;
+}
+
+
+.admin-payment-view-btn:hover,
+.admin-payment-verify-btn:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   RESPONSIVE
+   ================================= */
+
+@media (max-width: 900px) {
+
+    .admin-payment-summary {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .admin-payment-summary {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-payments-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .admin-payment-filter select,
+    .admin-payment-status-filter select {
+        width: 100%;
+    }
+
+}
