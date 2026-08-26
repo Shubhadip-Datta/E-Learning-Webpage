@@ -1,283 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>E-Learn | Student Dashboard</title>
+<title>E-Learn | Student Dashboard</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="dashboard">
+	<div class="dashboard">
 
-        <!-- Sidebar -->
+		<!-- Sidebar -->
 
-        <aside class="sidebar">
+		<aside class="sidebar">
 
-            <div class="sidebar-brand">
-                <div class="brand-icon">E</div>
+			<div class="sidebar-brand">
+				<div class="brand-icon">E</div>
 
-                <div>
-                    <h2>E-Learn</h2>
-                    <p>Learning Portal</p>
-                </div>
-            </div>
+				<div>
+					<h2>E-Learn</h2>
+					<p>Learning Portal</p>
+				</div>
+			</div>
 
 
-            <nav class="sidebar-nav">
+			<nav class="sidebar-nav">
 
-                <a href="#" class="nav-item active">
-                    <span>⌂</span>
-                    Dashboard
-                </a>
+				<a href="#" class="nav-item active"> <span>⌂</span> Dashboard
+				</a> <a href="#" class="nav-item"> <span>▣</span> My Courses
+				</a> <a href="#" class="nav-item"> <span>₹</span> Fees
+				</a>
 
-                <a href="#" class="nav-item">
-                    <span>▣</span>
-                    My Courses
-                </a>
+			</nav>
 
-                <a href="#" class="nav-item">
-                    <span>₹</span>
-                    Fees
-                </a>
 
-            </nav>
+			<div class="sidebar-bottom">
 
+				<button class="theme-toggle dashboard-theme" id="themeToggle"
+					type="button">
+					<span id="themeIcon">☀️</span> <span id="themeText">Light</span>
+				</button>
 
-            <div class="sidebar-bottom">
+				<button class="logout-btn" id="logoutBtn">
+					<span>↪</span> Logout
+				</button>
 
-                <button class="theme-toggle dashboard-theme" id="themeToggle" type="button">
-                    <span id="themeIcon">☀️</span>
-                    <span id="themeText">Light</span>
-                </button>
+			</div>
 
-                <button class="logout-btn" id="logoutBtn">
-                    <span>↪</span>
-                    Logout
-                </button>
+		</aside>
 
-            </div>
 
-        </aside>
+		<!-- Main Content -->
 
+		<main class="dashboard-content">
 
-        <!-- Main Content -->
+			<header class="dashboard-header">
 
-        <main class="dashboard-content">
+				<div>
+					<p class="greeting">Good morning 👋</p>
+					<h1>Welcome back, Rahul!</h1>
+				</div>
 
-            <header class="dashboard-header">
+				<div class="profile-circle">R</div>
 
-                <div>
-                    <p class="greeting">Good morning 👋</p>
-                    <h1>Welcome back, Rahul!</h1>
-                </div>
+			</header>
 
-                <div class="profile-circle">
-                    R
-                </div>
 
-            </header>
+			<!-- Student Information -->
 
+			<section class="student-profile-card">
 
-            <!-- Student Information -->
+				<!-- Profile Header -->
 
-            <section class="student-profile">
+				<div class="student-profile-header">
 
-                <div class="profile-info">
+					<div class="student-profile-main">
 
-                    <div class="large-profile-circle">
-                        R
-                    </div>
+						<div class="student-avatar">R</div>
 
-                    <div>
-                        <h2>Rahul Das</h2>
-                        <p>Student ID: STU001</p>
-                        <span class="active-badge">Active Student</span>
-                    </div>
+						<div class="student-profile-name">
 
-                </div>
+							<h2 id="studentProfileName">Rahul Das</h2>
 
+							<span class="student-status"> Active Student </span>
 
-                <div class="student-details">
+						</div>
 
-                    <div>
-                        <span>Batch</span>
-                        <strong>Java Morning Batch</strong>
-                    </div>
+					</div>
 
-                    <div>
-                        <span>Faculty</span>
-                        <strong>Arindam Sen</strong>
-                    </div>
 
-                </div>
+					<button type="button" class="edit-profile-btn"
+						onclick="toggleStudentProfileEdit()">✎ Edit Profile</button>
 
-            </section>
+				</div>
 
 
-            <!-- Courses -->
+				<!-- Profile Details -->
 
-            <section class="dashboard-section">
+				<div class="student-profile-details">
 
-                <div class="section-heading">
+					<div class="profile-detail">
 
-                    <div>
-                        <p class="section-label">LEARNING</p>
-                        <h2>My Courses</h2>
-                    </div>
+						<span> Student ID </span> <strong> STU001 </strong>
 
-                </div>
+					</div>
 
 
-                <div class="course-grid">
+					<div class="profile-detail">
 
-                    <div class="course-card">
+						<span> Full Name </span> <strong id="profileStudentName">
+							Rahul Das </strong>
 
-                        <div class="course-icon">
-                            ☕
-                        </div>
+					</div>
 
-                        <div class="course-content">
 
-                            <h3>Java Programming</h3>
+					<div class="profile-detail">
 
-                            <p>
-                                Learn Java programming, OOP,
-                                collections and more.
-                            </p>
+						<span> Phone Number </span> <strong id="profileStudentPhone">
+							+91 XXXXX XXXXX </strong>
 
-                            <div class="course-meta">
-                                <span>Java Morning Batch</span>
-                                <span>₹1,500 / month</span>
-                            </div>
+					</div>
 
-                        </div>
 
-                    </div>
+					<div class="profile-detail">
 
+						<span> Email </span> <strong id="profileStudentEmail">
+							rahul@example.com </strong>
 
-                    <div class="course-card">
+					</div>
 
-                        <div class="course-icon">
-                            🗄️
-                        </div>
 
-                        <div class="course-content">
+					<div class="profile-detail">
 
-                            <h3>Database Management</h3>
+						<span> Address </span> <strong id="profileStudentAddress">
+							Kolkata, West Bengal </strong>
 
-                            <p>
-                                Learn SQL, database design,
-                                normalization and queries.
-                            </p>
+					</div>
 
-                            <div class="course-meta">
-                                <span>DBMS Evening Batch</span>
-                                <span>₹1,200 / month</span>
-                            </div>
+				</div>
 
-                        </div>
 
-                    </div>
+				<!-- Edit Profile -->
 
-                </div>
+				<div class="student-profile-edit" id="studentProfileEdit"
+					style="display: none;">
 
-            </section>
+					<div class="profile-edit-field">
 
+						<label> Full Name </label> <input type="text" id="editStudentName"
+							value="Rahul Das">
 
-            <!-- Fees -->
+					</div>
 
-            <section class="dashboard-section">
 
-                <div class="section-heading">
+					<div class="profile-edit-field">
 
-                    <div>
-                        <p class="section-label">PAYMENTS</p>
-                        <h2>Monthly Fees</h2>
-                    </div>
+						<label> Phone Number </label> <input type="tel"
+							id="editStudentPhone" value="+91 XXXXX XXXXX">
 
-                    <span class="fee-summary">
-                        Monthly Fee: ₹2,700
-                    </span>
+					</div>
 
-                </div>
 
+					<div class="profile-edit-field">
 
-                <div class="fees-card">
+						<label> Email </label> <input type="email" id="editStudentEmail"
+							value="rahul@example.com">
 
-                    <div class="fee-row fee-header">
+					</div>
 
-                        <span>Month</span>
-                        <span>Amount</span>
-                        <span>Status</span>
 
-                    </div>
+					<div class="profile-edit-field">
 
+						<label> Address </label>
 
-                    <div class="fee-row">
+						<textarea id="editStudentAddress" rows="3">Kolkata, West Bengal</textarea>
 
-                        <span>August 2026</span>
+					</div>
 
-                        <span>₹2,700</span>
 
-                        <span class="status paid">
-                            Paid
-                        </span>
+					<div class="profile-edit-actions">
 
-                    </div>
+						<button type="button" class="cancel-profile-btn"
+							onclick="toggleStudentProfileEdit()">Cancel</button>
 
+						<button type="button" class="save-profile-btn"
+							onclick="saveStudentProfile()">Save Changes</button>
 
-                    <div class="fee-row">
+					</div>
 
-                        <span>September 2026</span>
+				</div>
 
-                        <span>₹2,700</span>
+			</section>
 
-                        <span class="status paid">
-                            Paid
-                        </span>
 
-                    </div>
+			<!-- Available Courses -->
 
+			<section class="dashboard-section">
 
-                    <div class="fee-row">
+				<div class="section-heading">
 
-                        <span>October 2026</span>
+					<div>
+						<p class="section-label">LEARNING</p>
+						<h2>Available Courses</h2>
+					</div>
 
-                        <span>₹2,700</span>
+				</div>
 
-                        <span class="status pending">
-                            Pending
-                        </span>
 
-                    </div>
+				<div class="course-grid" id="availableCoursesList">
 
+					<!-- Courses will be loaded by JavaScript -->
 
-                    <div class="fee-row">
+				</div>
 
-                        <span>November 2026</span>
+			</section>
 
-                        <span>₹2,700</span>
 
-                        <span class="status pending">
-                            Pending
-                        </span>
+			<!-- My Batches -->
 
-                    </div>
+			<section class="dashboard-section">
 
-                </div>
+				<div class="section-heading">
 
-            </section>
+					<div>
+						<p class="section-label">ENROLLED</p>
+						<h2>My Batches</h2>
+					</div>
 
-        </main>
+				</div>
 
-    </div>
 
+				<div class="course-grid" id="myBatchesList">
 
-    <script src="script.js"></script>
+					<!-- Enrolled batches will be loaded by JavaScript -->
+
+				</div>
+
+			</section>
+
+			<!-- ================================
+     			STUDENT BATCH DETAILS
+     			================================ -->
+
+			<section class="student-batch-details" id="studentBatchDetails"
+				style="display: none;">
+
+				<!-- Batch Header -->
+				<div class="student-batch-header">
+
+					<div>
+						<h2 id="studentBatchTitle">Batch</h2>
+					</div>
+
+					<button type="button" class="student-back-btn"
+						onclick="closeStudentBatch()">← Back to My Batches</button>
+
+				</div>
+
+
+				<!-- Batch Information -->
+
+				<div class="student-batch-info-card">
+
+					<div class="student-batch-info-item">
+
+						<div class="student-info-icon">👤</div>
+
+						<div>
+							<span>Teacher</span> <strong id="studentBatchTeacher"> -
+							</strong>
+						</div>
+
+					</div>
+
+
+					<div class="student-batch-info-item">
+
+						<div class="student-info-icon">📅</div>
+
+						<div>
+							<span>Starting Date</span> <strong id="studentBatchStartDate">
+								- </strong>
+						</div>
+
+					</div>
+
+
+					<div class="student-batch-info-item">
+
+						<div class="student-info-icon">📅</div>
+
+						<div>
+							<span>Ending Date</span> <strong id="studentBatchEndDate">
+								- </strong>
+						</div>
+
+					</div>
+
+
+					<div class="student-batch-info-item">
+
+						<div class="student-info-icon">₹</div>
+
+						<div>
+							<span>Monthly Fee</span> <strong id="studentBatchFee"> -
+							</strong>
+						</div>
+
+					</div>
+
+				</div>
+
+
+				<!-- Course Topics -->
+
+				<div class="student-topics-card">
+
+					<div class="student-topics-heading">
+
+						<h3>📋 Course Topics</h3>
+
+					</div>
+
+
+					<div class="student-topics-list" id="studentTopicsList">
+
+						<!-- Topics will be loaded by JavaScript -->
+
+					</div>
+
+				</div>
+
+				<!-- Fee Structure -->
+
+				<div class="student-fees-card">
+
+					<div class="student-fees-heading">
+
+						<div>
+
+							<p class="section-label">PAYMENT</p>
+
+							<h3>Fee Structure</h3>
+
+						</div>
+
+
+						<span class="student-monthly-fee" id="studentMonthlyFee">
+
+							₹0 / month </span>
+
+					</div>
+
+
+					<div class="student-fee-table">
+
+						<!-- Table Header -->
+
+						<div class="student-fee-row student-fee-header">
+
+							<span> Month </span> <span> Amount </span> <span> Status </span>
+
+						</div>
+
+
+						<!-- Monthly fees will be generated here -->
+
+						<div id="studentBatchFees">
+
+							<!-- JavaScript will generate 12 months -->
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</section>
+
+		</main>
+
+	</div>
+
+
+	<script src="script.js"></script>
 
 </body>
 </html>

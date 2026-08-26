@@ -200,6 +200,10 @@ const batches = {
 		    schedule: "Monday to Friday",
 
 		    startDate: "01 August 2026",
+			
+			endDate: "01 February 2027",
+			
+			monthlyFee: 1500,
 
         topics: [
             "Introduction to Java",
@@ -259,9 +263,13 @@ const batches = {
 
 		    subject: "Java Programming",
 
-		    schedule: "Monday to Friday",
+		    schedule: "Weekends",
 
 		    startDate: "15 August 2026",
+			
+			endDate: "15 August 2027",
+			
+			monthlyFee: 1200,
 
         topics: [
             "Java Basics",
@@ -434,6 +442,10 @@ function displayTopics() {
 
     const topics =
         batches[currentBatch].topics;
+		
+	if (!batches[currentBatch].coveredTopics) {
+		batches[currentBatch].coveredTopics = {};
+	}
 
     topics.forEach(function (topic, index) {
 
@@ -1408,4 +1420,627 @@ function closeStudents() {
     }
 
     studentsSection.style.display = "none";
+}
+
+// =================================
+// DISPLAY AVAILABLE COURSES
+// =================================
+
+function displayAvailableCourses() {
+
+    const coursesList =
+        document.getElementById("availableCoursesList");
+
+    if (!coursesList) {
+        return;
+    }
+
+    coursesList.innerHTML = "";
+
+    const studentId = "STU001";
+
+    let availableCount = 0;
+
+
+    Object.keys(batches).forEach(function (batchId) {
+
+        const batch =
+            batches[batchId];
+
+
+        // Check if student is already enrolled
+
+        const alreadyEnrolled =
+            batch.students.some(function (student) {
+
+                return student.id === studentId;
+
+            });
+
+
+        // Don't show enrolled batch
+
+        if (alreadyEnrolled) {
+            return;
+        }
+
+
+        // At least one course is available
+
+        availableCount++;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "course-card";
+
+
+        card.innerHTML = `
+
+            <div class="course-icon">
+                ☕
+            </div>
+
+            <div class="course-content">
+
+                <h3>
+                    ${batch.name}
+                </h3>
+
+                <p>
+                    ${batch.subject} ·
+                    ${batch.schedule}
+                </p>
+
+                <div class="course-meta">
+
+                    <span>
+                        ₹${batch.monthlyFee} / month
+                    </span>
+
+                    <button
+                        type="button"
+                        class="view-batch-btn"
+                        onclick="enrollStudent('${batchId}')">
+
+                        Enroll
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        coursesList.appendChild(card);
+
+    });
+
+
+    // =================================
+    // NO AVAILABLE COURSES
+    // =================================
+
+    if (availableCount === 0) {
+
+        coursesList.innerHTML = `
+
+            <div class="no-courses-message">
+
+                <div class="no-courses-icon">
+                    📚
+                </div>
+
+                <h3>
+                    No Courses Available
+                </h3>
+
+                <p>
+                    There are no courses available
+                    for enrollment at the moment.
+                    Please check back later.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+}
+displayBatches();
+displayAvailableCourses();
+displayMyBatches();
+
+// =================================
+// ENROLL STUDENT
+// =================================
+
+function enrollStudent(batchId) {
+
+    const batch = batches[batchId];
+
+    if (!batch) {
+        return;
+    }
+
+    // Current logged-in student
+    const studentId = "STU001";
+
+    // Check if already enrolled
+    const alreadyEnrolled =
+        batch.students.some(function (student) {
+            return student.id === studentId;
+        });
+
+    if (alreadyEnrolled) {
+
+        alert(
+            `You are already enrolled in ${batch.name}.`
+        );
+
+        return;
+    }
+
+    // Add student to batch
+    batch.students.push({
+
+        id: studentId,
+        name: "Rahul Das",
+        active: true
+
+    });
+
+    // Refresh student sections
+    displayAvailableCourses();
+    displayMyBatches();
+
+    alert(
+        `You have successfully enrolled in ${batch.name}.`
+    );
+}
+// =================================
+// DISPLAY MY BATCHES
+// =================================
+
+function displayMyBatches() {
+
+    const myBatchesList =
+        document.getElementById("myBatchesList");
+
+    if (!myBatchesList) {
+        return;
+    }
+
+    myBatchesList.innerHTML = "";
+
+    const studentId = "STU001";
+
+    Object.keys(batches).forEach(function (batchId) {
+
+        const batch = batches[batchId];
+
+        const enrolled =
+            batch.students.some(function (student) {
+                return student.id === studentId;
+            });
+
+        if (!enrolled) {
+            return;
+        }
+
+        const card =
+            document.createElement("div");
+
+        card.className = "course-card";
+
+        card.innerHTML = `
+
+            <div class="course-icon">
+                ☕
+            </div>
+
+            <div class="course-content">
+
+                <h3>
+                    ${batch.name}
+                </h3>
+
+                <p>
+                    ${batch.subject}
+                </p>
+
+                <div class="course-meta">
+
+                    <span>
+                        ${batch.schedule}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="view-batch-btn"
+                        onclick="viewStudentBatch('${batchId}')">
+
+                        View Batch →
+
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        myBatchesList.appendChild(card);
+
+    });
+}
+
+// =================================
+// VIEW STUDENT BATCH
+// =================================
+
+function viewStudentBatch(batchId) {
+
+    const batch = batches[batchId];
+
+    if (!batch) {
+        return;
+    }
+
+    const batchDetails =
+        document.getElementById("studentBatchDetails");
+
+    if (!batchDetails) {
+        return;
+    }
+
+    // Batch name
+    document.getElementById("studentBatchTitle")
+        .textContent = batch.name;
+
+    // Teacher
+    document.getElementById("studentBatchTeacher")
+        .textContent = "Arindam Sen";
+
+    // Start date
+    document.getElementById("studentBatchStartDate")
+        .textContent = batch.startDate || "Not specified";
+
+    // End date
+    document.getElementById("studentBatchEndDate")
+        .textContent = batch.endDate || "Not specified";
+		
+	// Monthly fee
+	document.getElementById("studentBatchFee")
+		.textContent = `₹${batch.monthlyFee || 0}`;
+
+    // Display topics
+    displayStudentTopics(batchId);
+	// Display fees
+	displayStudentFees(batchId);
+
+    // Show details
+    batchDetails.style.display = "block";
+
+    // Scroll to details
+    batchDetails.scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+// =================================
+// EDIT STUDENT PROFILE
+// =================================
+
+function toggleStudentProfileEdit() {
+
+    const editForm =
+        document.getElementById("studentProfileEdit");
+
+    if (!editForm) {
+        return;
+    }
+
+    const isHidden =
+        editForm.style.display === "none";
+
+    editForm.style.display =
+        isHidden ? "grid" : "none";
+
+}
+
+// =================================
+// SAVE STUDENT PROFILE
+// =================================
+
+function saveStudentProfile() {
+
+    const name =
+        document.getElementById("editStudentName").value.trim();
+
+    const phone =
+        document.getElementById("editStudentPhone").value.trim();
+
+    const email =
+        document.getElementById("editStudentEmail").value.trim();
+
+    const address =
+        document.getElementById("editStudentAddress").value.trim();
+
+
+    // Basic validation
+
+    if (!name || !phone || !email || !address) {
+
+        alert("Please fill in all profile fields.");
+
+        return;
+    }
+
+
+    // Update displayed profile information
+
+    document.getElementById("studentProfileName")
+        .textContent = name;
+
+    document.getElementById("profileStudentName")
+        .textContent = name;
+
+    document.getElementById("profileStudentPhone")
+        .textContent = phone;
+
+    document.getElementById("profileStudentEmail")
+        .textContent = email;
+
+    document.getElementById("profileStudentAddress")
+        .textContent = address;
+
+
+    // Update avatar with first letter
+
+    const avatar =
+        document.querySelector(".student-avatar");
+
+    if (avatar) {
+
+        avatar.textContent =
+            name.charAt(0).toUpperCase();
+
+    }
+
+
+    // Close edit form
+
+    document.getElementById("studentProfileEdit")
+        .style.display = "none";
+
+
+    alert("Profile updated successfully.");
+}
+
+// =================================
+// DISPLAY STUDENT TOPICS
+// =================================
+
+function displayStudentTopics(batchId) {
+
+    const topicsList =
+        document.getElementById("studentTopicsList");
+
+    if (!topicsList) {
+        return;
+    }
+
+    topicsList.innerHTML = "";
+
+    const batch =
+        batches[batchId];
+
+    if (!batch) {
+        return;
+    }
+
+    if (!batch.coveredTopics) {
+        batch.coveredTopics = {};
+    }
+
+    batch.topics.forEach(function (topic, index) {
+
+        const isCovered =
+            batch.coveredTopics[index] === true;
+
+        const topicElement =
+            document.createElement("div");
+
+        topicElement.className =
+            isCovered
+                ? "student-topic-row covered"
+                : "student-topic-row not-covered";
+
+        topicElement.innerHTML = `
+
+            <div class="student-topic-left">
+
+                <span class="student-topic-icon">
+                    ${isCovered ? "✓" : "○"}
+                </span>
+
+                <span class="student-topic-name">
+                    ${topic}
+                </span>
+
+            </div>
+
+
+            <span class="student-topic-status">
+
+                ${isCovered
+                    ? "✓ Covered"
+                    : "○ Not Covered"}
+
+            </span>
+
+        `;
+
+        topicsList.appendChild(topicElement);
+
+    });
+}
+
+// =================================
+// DISPLAY STUDENT FEES
+// =================================
+
+function displayStudentFees(batchId) {
+
+    const feesList =
+        document.getElementById("studentBatchFees");
+
+    const monthlyFee =
+        document.getElementById("studentMonthlyFee");
+
+    if (!feesList || !monthlyFee) {
+        return;
+    }
+
+    const batch =
+        batches[batchId];
+
+    if (!batch) {
+        return;
+    }
+
+    feesList.innerHTML = "";
+
+    // Display monthly fee
+    monthlyFee.textContent =
+        `₹${batch.monthlyFee} / month`;
+
+
+    // -----------------------------
+    // BATCH START DATE
+    // -----------------------------
+
+    const startDate =
+        new Date(batch.startDate);
+
+
+    // -----------------------------
+    // BATCH END DATE
+    // -----------------------------
+
+    const endDate =
+        new Date(batch.endDate);
+
+
+    // Start from the first month
+    let currentDate =
+        new Date(
+            startDate.getFullYear(),
+            startDate.getMonth(),
+            1
+        );
+
+
+    // -----------------------------
+    // GENERATE MONTHS
+    // -----------------------------
+
+    while (currentDate <= endDate) {
+
+        const monthName =
+            currentDate.toLocaleString(
+                "en-IN",
+                {
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+
+
+        const feeRow =
+            document.createElement("div");
+
+        feeRow.className =
+            "student-fee-row";
+
+
+        feeRow.innerHTML = `
+
+            <span>
+                ${monthName}
+            </span>
+
+            <span>
+                ₹${batch.monthlyFee}
+            </span>
+
+            <span class="fee-status-action">
+
+                <span class="status pending">
+                    Pending
+                </span>
+
+                <button
+                    type="button"
+                    class="pay-now-btn"
+                    onclick="startPayment(
+                        '${batchId}',
+                        '${monthName}'
+                    )">
+
+                    Pay Now
+
+                </button>
+
+            </span>
+
+        `;
+
+
+        feesList.appendChild(feeRow);
+
+
+        // Move to next month
+        currentDate.setMonth(
+            currentDate.getMonth() + 1
+        );
+
+    }
+
+}
+
+// =================================
+// START PAYMENT
+// =================================
+
+function startPayment(batchId, month) {
+
+    alert(
+        `Payment gateway will be connected here.\n\n` +
+        `Batch: ${batches[batchId].name}\n` +
+        `Month: ${month}\n` +
+        `Amount: ₹${batches[batchId].monthlyFee}`
+    );
+
+}
+
+// =================================
+// CLOSE STUDENT BATCH
+// =================================
+
+function closeStudentBatch() {
+
+    const batchDetails =
+        document.getElementById("studentBatchDetails");
+
+    if (!batchDetails) {
+        return;
+    }
+
+    batchDetails.style.display = "none";
+
 }
