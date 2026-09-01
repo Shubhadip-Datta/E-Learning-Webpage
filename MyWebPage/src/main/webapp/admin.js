@@ -3476,9 +3476,26 @@ function verifyPayment(index) {
     }
 
 
+    const student =
+        adminData.students.find(
+            function (student) {
+
+                return student.id ===
+                    payment.studentId;
+
+            }
+        );
+
+
+    const studentName =
+        student
+            ? student.name
+            : "Unknown Student";
+
+
     const confirmed =
         confirm(
-            `Verify payment for ${payment.studentName} for ${formatPaymentMonth(payment.month)}?`
+            `Verify payment for ${studentName} for ${formatPaymentMonth(payment.month)}?`
         );
 
 
@@ -3497,11 +3514,10 @@ function verifyPayment(index) {
 
 
     alert(
-        `Payment verified for ${payment.studentName}.`
+        `Payment verified for ${studentName}.`
     );
 
 }
-
 
 // =================================
 // VIEW PAYMENT
@@ -3520,24 +3536,69 @@ function viewPayment(index) {
     }
 
 
+    const student =
+        adminData.students.find(
+            function (student) {
+
+                return student.id ===
+                    payment.studentId;
+
+            }
+        );
+
+
+    const batch =
+        adminData.batches.find(
+            function (batch) {
+
+                return batch.id ===
+                    payment.batchId;
+
+            }
+        );
+
+
+    const paymentAmount =
+        batch
+            ? Number(batch.monthlyFee)
+            : 0;
+
+
     alert(
 
-        `Student: ${payment.studentName}\n` +
+        `Student: ${
+            student
+                ? student.name
+                : "Unknown Student"
+        }\n` +
 
-        `Student ID: ${payment.studentId}\n` +
+        `Student ID: ${
+            payment.studentId
+        }\n` +
 
-        `Batch: ${payment.batch}\n` +
+        `Batch: ${
+            batch
+                ? batch.name
+                : "Unknown Batch"
+        }\n` +
 
-        `Month: ${formatPaymentMonth(payment.month)}\n` +
+        `Month: ${
+            formatPaymentMonth(
+                payment.month
+            )
+        }\n` +
 
-        `Amount: ₹${payment.amount}\n` +
+        `Amount: ₹${paymentAmount}\n` +
 
-        `Status: ${payment.status === "paid" ? "Paid" : "Pending"}`
+        `Status: ${
+            payment.status === "paid"
+                ? "Paid"
+                : "Pending"
+        }`
 
     );
 
 }
-
 
 // =================================
 // PAYMENT FILTERS

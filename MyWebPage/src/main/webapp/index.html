@@ -1,125 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>E-Learn | Tuition Portal</title>
+<title>E-Learn | Tuition Portal</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <main class="login-page">
-    
-    		<button class="theme-toggle" id="themeToggle" type="button">
-    		
-    			<span id="themeIcon">☀️</span>
-    			<span id="themeText">Light</span>
-    			
+	<main class="login-page">
+
+		<button class="theme-toggle" id="themeToggle" type="button">
+
+			<span id="themeIcon">☀️</span> <span id="themeText">Light</span>
+
 		</button>
 
-        <section class="login-card">
+		<section class="login-card">
 
-            <div class="brand">
-                <div class="brand-icon">E</div>
+			<div class="brand">
+				<div class="brand-icon">E</div>
 
-                <div>
-                    <h1>E-Learn</h1>
-                    <p>Tuition Learning Portal</p>
-                </div>
-            </div>
-
-
-            <div class="welcome-text">
-                <h2>Welcome back 👋</h2>
-                <p>Sign in to continue your learning journey.</p>
-            </div>
+				<div>
+					<h1>E-Learn</h1>
+					<p>Tuition Learning Portal</p>
+				</div>
+			</div>
 
 
-            <!-- Login Type -->
-
-            <div class="login-type">
-
-                <button class="login-type-btn active" id="studentBtn">
-                    Student
-                </button>
-
-                <button class="login-type-btn" id="facultyBtn">
-                    Faculty
-                </button>
-
-            </div>
+			<div class="welcome-text">
+				<h2>Welcome back 👋</h2>
+				<p>Sign in to continue your learning journey.</p>
+			</div>
 
 
-            <!-- Login Form -->
+			<!-- Login Type -->
 
-            <form id="loginForm">
+			<div class="login-type">
 
-                <div class="form-group">
+				<button class="login-type-btn active" id="studentBtn">
 
-                    <label for="userId" id="userIdLabel">
-                        Student ID
-                    </label>
-
-                    <input
-                        type="text"
-                        id="userId"
-                        placeholder="Enter your student ID"
-                        required
-                    >
-
-                </div>
+					Student</button>
 
 
-                <div class="form-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter your password"
-                        required
-                    >
-
-                </div>
+				<button class="login-type-btn" id="facultyBtn">Faculty</button>
 
 
-                <div class="form-options">
+				<button class="login-type-btn" id="adminBtn">Admin</button>
 
-                    <label class="remember-me">
-                        <input type="checkbox">
-                        <span>Remember me</span>
-                    </label>
-
-                    <a href="#" class="forgot-password">
-                        Forgot password?
-                    </a>
-
-                </div>
+			</div>
 
 
-                <button type="submit" class="login-btn">
-                    Sign In
-                </button>
+			<!-- Login Form -->
 
-            </form>
+			<form id="loginForm">
 
+				<div class="form-group">
 
-            <p class="login-footer">
-                © 2026 E-Learn · Learning made simple
-            </p>
+					<label for="userId" id="userIdLabel"> Student ID </label> <input
+						type="text" id="userId" placeholder="Enter your student ID"
+						required>
 
-        </section>
-
-    </main>
+				</div>
 
 
-    <script src="script.js"></script>
+				<div class="form-group">
+
+					<label for="password"> Password </label> <input type="password"
+						id="password" placeholder="Enter your password" required>
+
+				</div>
+
+
+				<div class="form-options">
+
+					<label class="remember-me"> <input type="checkbox">
+						<span>Remember me</span>
+					</label> <a href="#" class="forgot-password"> Forgot password? </a>
+
+				</div>
+
+
+				<button type="submit" class="login-btn">Sign In</button>
+
+			</form>
+
+
+			<p class="login-footer">© 2026 E-Learn · Learning made simple</p>
+
+		</section>
+
+	</main>
+
+
+	<script src="script.js"></script>
 
 </body>
 </html>

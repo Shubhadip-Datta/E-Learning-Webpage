@@ -65,107 +65,211 @@ if (themeToggle) {
 // LOGIN TYPE
 // =================================
 
-const studentBtn = document.getElementById("studentBtn");
-const facultyBtn = document.getElementById("facultyBtn");
+const studentBtn =
+    document.getElementById("studentBtn");
 
-const userIdLabel = document.getElementById("userIdLabel");
-const userIdInput = document.getElementById("userId");
+const facultyBtn =
+    document.getElementById("facultyBtn");
 
-
-if (studentBtn && facultyBtn) {
-
-    studentBtn.addEventListener("click", function () {
-
-        studentBtn.classList.add("active");
-        facultyBtn.classList.remove("active");
-
-        userIdLabel.textContent = "Student ID";
-
-        userIdInput.placeholder =
-            "Enter your student ID";
-
-    });
+const adminBtn =
+    document.getElementById("adminBtn");
 
 
-    facultyBtn.addEventListener("click", function () {
+const userIdLabel =
+    document.getElementById("userIdLabel");
 
-        facultyBtn.classList.add("active");
-        studentBtn.classList.remove("active");
+const userIdInput =
+    document.getElementById("userId");
 
-        userIdLabel.textContent = "Faculty ID";
 
-        userIdInput.placeholder =
-            "Enter your faculty ID";
+if (studentBtn && facultyBtn && adminBtn) {
 
-    });
+    studentBtn.addEventListener(
+        "click",
+        function () {
+
+            studentBtn.classList.add("active");
+
+            facultyBtn.classList.remove("active");
+
+            adminBtn.classList.remove("active");
+
+
+            userIdLabel.textContent =
+                "Student ID";
+
+
+            userIdInput.placeholder =
+                "Enter your student ID";
+
+        }
+    );
+
+
+    facultyBtn.addEventListener(
+        "click",
+        function () {
+
+            facultyBtn.classList.add("active");
+
+            studentBtn.classList.remove("active");
+
+            adminBtn.classList.remove("active");
+
+
+            userIdLabel.textContent =
+                "Faculty ID";
+
+
+            userIdInput.placeholder =
+                "Enter your faculty ID";
+
+        }
+    );
+
+
+    adminBtn.addEventListener(
+        "click",
+        function () {
+
+            adminBtn.classList.add("active");
+
+            studentBtn.classList.remove("active");
+
+            facultyBtn.classList.remove("active");
+
+
+            userIdLabel.textContent =
+                "Admin ID";
+
+
+            userIdInput.placeholder =
+                "Enter your admin ID";
+
+        }
+    );
 
 }
-
 
 // =================================
 // LOGIN
 // =================================
 
-const loginForm = document.getElementById("loginForm");
+const loginForm =
+    document.getElementById("loginForm");
+
 
 if (loginForm) {
 
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener(
+        "submit",
+        function (event) {
 
-        event.preventDefault();
-
-        const userId =
-            userIdInput.value.trim();
-
-        const password =
-            document.getElementById("password").value;
-
-        const isStudent =
-            studentBtn.classList.contains("active");
+            event.preventDefault();
 
 
-        if (isStudent) {
+            const userId =
+                userIdInput.value
+                    .trim()
+                    .toUpperCase();
 
-            if (
-                userId === "STU001" &&
-                password === "student123"
-            ) {
 
-                window.location.href =
-                    "student-dashboard.html";
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
 
-            } else {
 
-                alert(
-                    "Invalid Student ID or Password."
+            const isStudent =
+                studentBtn.classList.contains(
+                    "active"
                 );
+
+
+            const isFaculty =
+                facultyBtn.classList.contains(
+                    "active"
+                );
+
+
+            const isAdmin =
+                adminBtn.classList.contains(
+                    "active"
+                );
+
+
+            // STUDENT
+
+            if (isStudent) {
+
+                if (
+                    userId === "STU001" &&
+                    password === "student123"
+                ) {
+
+                    window.location.href =
+                        "student-dashboard.html";
+
+                } else {
+
+                    alert(
+                        "Invalid Student ID or Password."
+                    );
+
+                }
 
             }
 
-        } else {
 
-            if (
-                userId === "FAC001" &&
-                password === "faculty123"
-            ) {
+            // FACULTY
 
-                window.location.href =
-                    "faculty-dashboard.html";
+            else if (isFaculty) {
 
-            } else {
+                if (
+                    userId === "FAC001" &&
+                    password === "faculty123"
+                ) {
 
-                alert(
-                    "Invalid Faculty ID or Password."
-                );
+                    window.location.href =
+                        "faculty-dashboard.html";
+
+                } else {
+
+                    alert(
+                        "Invalid Faculty ID or Password."
+                    );
+
+                }
+
+            }
+
+
+            // ADMIN
+
+            else if (isAdmin) {
+
+                if (
+                    userId === "ADMIN001" &&
+                    password === "admin123"
+                ) {
+
+                    window.location.href =
+                        "admin-dashboard.html";
+
+                } else {
+
+                    alert(
+                        "Invalid Admin ID or Password."
+                    );
+
+                }
 
             }
 
         }
-
-    });
+    );
 
 }
-
 
 // =================================
 // LOGOUT
