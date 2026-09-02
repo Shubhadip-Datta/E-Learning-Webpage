@@ -203,38 +203,66 @@ function displayAdminOverview() {
 
     if (totalStudents) {
 
-        totalStudents.textContent =
-            adminData.students.length;
+        const xhr =
+            new XMLHttpRequest();
+
+        xhr.open(
+            "GET",
+            "students",
+            true
+        );
+
+        xhr.onreadystatechange =
+            function () {
+
+                if (xhr.readyState !== 4) {
+                    return;
+                }
+
+                if (xhr.status === 200) {
+
+                    const students =
+                        JSON.parse(xhr.responseText);
+
+                    totalStudents.textContent =
+                        students.length;
+
+                }
+
+            };
+
+        xhr.send();
+    }
+
+
+    if (totalFaculty) {
+
+        totalFaculty.textContent =
+            adminData.faculty.length;
 
     }
 
 
-	if (totalFaculty) {
+    if (activeBatches) {
 
-	    totalFaculty.textContent =
-	        adminData.faculty.length;
+        activeBatches.textContent =
+            adminData.batches.filter(
+                function (batch) {
 
-	}
+                    return batch.active;
 
+                }
+            ).length;
 
-	if (activeBatches) {
-
-	    activeBatches.textContent =
-	        adminData.batches.filter(
-	            function (batch) {
-	                return batch.active;
-	            }
-	        ).length;
-
-	}
+    }
 
 
-	if (totalCourses) {
+    if (totalCourses) {
 
-	    totalCourses.textContent =
-	        adminData.courses.length;
+        totalCourses.textContent =
+            adminData.courses.length;
 
-	}
+    }
 
 }
 
@@ -256,173 +284,194 @@ function displayAdminStudents(searchTerm = "") {
 
 
     if (!studentsList) {
-
         return;
-
     }
 
 
-    const term =
-        searchTerm.trim().toLowerCase();
+    const xhr =
+        new XMLHttpRequest();
 
-
-    const filteredStudents =
-        adminData.students.filter(
-            function (student) {
-
-                return (
-
-                    student.id
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    student.name
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    student.batch
-                        .toLowerCase()
-                        .includes(term)
-
-                );
-
-            }
-        );
-
-
-    studentsList.innerHTML = "";
-
-
-    filteredStudents.forEach(
-        function (student) {
-
-            const index =
-                adminData.students.indexOf(student);
-
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "admin-student-row";
-
-
-            const status =
-                student.active
-                    ? "Active"
-                    : "Inactive";
-
-
-            const statusClass =
-                student.active
-                    ? "active"
-                    : "inactive";
-
-
-            const actionText =
-                student.active
-                    ? "Deactivate"
-                    : "Activate";
-
-
-            const actionClass =
-                student.active
-                    ? "deactivate"
-                    : "activate";
-
-
-            row.innerHTML = `
-
-                <span>
-                    ${student.id}
-                </span>
-
-
-                <span>
-                    ${student.name}
-                </span>
-
-
-                <span>
-                    ${student.batch}
-                </span>
-
-
-                <span>
-
-                    <span
-                        class="admin-student-status ${statusClass}">
-
-                        ${status}
-
-                    </span>
-
-                </span>
-
-
-                <span class="admin-student-actions">
-
-                    <button
-                        type="button"
-                        class="admin-status-btn ${actionClass}"
-                        onclick="toggleStudentStatus(${index})">
-
-                        ${actionText}
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="admin-remove-btn"
-                        onclick="removeStudent(${index})">
-
-                        Remove
-
-                    </button>
-
-                </span>
-
-            `;
-
-
-            studentsList.appendChild(row);
-
-        }
+    xhr.open(
+        "GET",
+        "students",
+        true
     );
 
 
-    if (countElement) {
+    xhr.onreadystatechange =
+        function () {
 
-        countElement.textContent =
-            filteredStudents.length;
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
-    }
+
+            if (xhr.status !== 200) {
+
+                alert(
+                    "Could not load students."
+                );
+
+                return;
+            }
 
 
-    if (summaryElement) {
+            const students =
+                JSON.parse(xhr.responseText);
 
-        if (filteredStudents.length === 0) {
 
-            summaryElement.textContent =
-                "No students found";
+            adminData.students =
+                students.map(
+                    function (student) {
 
-        } else {
+                        return {
+                            id: student.id,
+                            name: student.name,
+                            batch: student.batch,
+                            active: true
+                        };
 
-            summaryElement.textContent =
-                `Showing ${filteredStudents.length} of ${adminData.students.length} students`;
+                    }
+                );
 
-        }
 
-    }
+            const term =
+                searchTerm.trim().toLowerCase();
+
+
+            const filteredStudents =
+                adminData.students.filter(
+                    function (student) {
+
+                        return (
+                            student.id
+                                .toLowerCase()
+                                .includes(term)
+
+                            ||
+
+                            student.name
+                                .toLowerCase()
+                                .includes(term)
+
+                            ||
+
+                            student.batch
+                                .toLowerCase()
+                                .includes(term)
+                        );
+
+                    }
+                );
+
+
+            studentsList.innerHTML = "";
+
+
+            filteredStudents.forEach(
+                function (student) {
+
+                    const index =
+                        adminData.students.indexOf(
+                            student
+                        );
+
+
+                    const row =
+                        document.createElement("div");
+
+
+                    row.className =
+                        "admin-student-row";
+
+
+                    row.innerHTML = `
+
+                        <span>
+                            ${student.id}
+                        </span>
+
+                        <span>
+                            ${student.name}
+                        </span>
+
+                        <span>
+                            ${student.batch}
+                        </span>
+
+                        <span>
+
+                            <span
+                                class="admin-student-status active">
+
+                                Active
+
+                            </span>
+
+                        </span>
+
+                        <span
+                            class="admin-student-actions">
+
+                            <button
+                                type="button"
+                                class="admin-status-btn deactivate"
+                                onclick="toggleStudentStatus(${index})">
+
+                                Deactivate
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-remove-btn"
+                                onclick="removeStudent(${index})">
+
+                                Remove
+
+                            </button>
+
+                        </span>
+
+                    `;
+
+
+                    studentsList.appendChild(row);
+
+                }
+            );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    filteredStudents.length;
+
+            }
+
+
+            if (summaryElement) {
+
+                if (filteredStudents.length === 0) {
+
+                    summaryElement.textContent =
+                        "No students found";
+
+                } else {
+
+                    summaryElement.textContent =
+                        `Showing ${filteredStudents.length} of ${adminData.students.length} students`;
+
+                }
+
+            }
+
+        };
+
+
+    xhr.send();
 
 }
-
 
 // =================================
 // OPEN STUDENTS
@@ -820,6 +869,10 @@ function closeAddStudent() {
     document.getElementById(
         "adminNewStudentBatch"
     ).value = "";
+	
+	document.getElementById(
+	    "studentPassword"
+	).value = "";
 
 }
 
@@ -853,17 +906,20 @@ function addStudent() {
         )
         .value
         .trim();
+		
+		const password =
+		    document.getElementById(
+		        "studentPassword"
+		    )
+		    .value;
 
 
-    if (!id || !name || !batch) {
-
-        alert(
-            "Please enter Student ID, Student Name and Batch."
-        );
-
-        return;
-
-    }
+			if (!id || !name || !batch || !password) {
+			    alert(
+			        "Please enter Student ID, Student Name, Batch and Password."
+			    );
+			    return;
+			}
 
 
     const alreadyExists =
@@ -887,29 +943,57 @@ function addStudent() {
     }
 
 
-    adminData.students.push({
+	const xhr =
+	    new XMLHttpRequest();
 
-        id: id,
+	xhr.open(
+	    "POST",
+	    "create-student",
+	    true
+	);
 
-        name: name,
+	xhr.setRequestHeader(
+	    "Content-Type",
+	    "application/x-www-form-urlencoded"
+	);
 
-        batch: batch,
+	xhr.onreadystatechange =
+	    function () {
 
-        active: true
+	        if (xhr.readyState !== 4) {
+	            return;
+	        }
 
-    });
+	        if (xhr.status === 200) {
 
+	            displayAdminStudents();
+	            displayAdminOverview();
+	            closeAddStudent();
 
-    displayAdminStudents();
+	            alert(
+	                `${name} has been added successfully.`
+	            );
 
-    displayAdminOverview();
+	        } else {
 
-    closeAddStudent();
+	            alert(
+	                xhr.responseText ||
+	                "Could not create student."
+	            );
+	        }
+	    };
 
+	const data =
+	    "userId=" +
+	    encodeURIComponent(id) +
+	    "&password=" +
+	    encodeURIComponent(password) +
+	    "&name=" +
+	    encodeURIComponent(name) +
+	    "&batch=" +
+	    encodeURIComponent(batch);
 
-    alert(
-        `${name} has been added successfully.`
-    );
+	xhr.send(data);
 
 }
 

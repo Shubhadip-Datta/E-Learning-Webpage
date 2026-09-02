@@ -158,7 +158,6 @@ if (studentBtn && facultyBtn && adminBtn) {
 const loginForm =
     document.getElementById("loginForm");
 
-
 if (loginForm) {
 
     loginForm.addEventListener(
@@ -167,104 +166,82 @@ if (loginForm) {
 
             event.preventDefault();
 
-
             const userId =
-                userIdInput.value
-                    .trim()
-                    .toUpperCase();
-
+                userIdInput.value.trim();
 
             const password =
-                document.getElementById(
-                    "password"
-                ).value;
+                document.getElementById("password").value;
 
 
-            const isStudent =
-                studentBtn.classList.contains(
-                    "active"
-                );
+            const xhr =
+                new XMLHttpRequest();
+
+            xhr.open(
+                "POST",
+                "login",
+                true
+            );
+
+            xhr.setRequestHeader(
+                "Content-Type",
+                "application/x-www-form-urlencoded"
+            );
 
 
-            const isFaculty =
-                facultyBtn.classList.contains(
-                    "active"
-                );
+            xhr.onreadystatechange =
+                function () {
+
+                    if (xhr.readyState !== 4) {
+                        return;
+                    }
 
 
-            const isAdmin =
-                adminBtn.classList.contains(
-                    "active"
-                );
+					if (xhr.status === 200) {
+
+					    const role = xhr.responseText
+					        .split("Role: ")[1]
+					        .trim();
+
+					    if (role === "ADMIN") {
+
+					        window.location.href =
+					            "admin-dashboard.html";
+
+					    } else if (role === "STUDENT") {
+
+					        window.location.href =
+					            "student-dashboard.html";
+
+					    } else if (role === "FACULTY") {
+
+					        window.location.href =
+					            "faculty-dashboard.html";
+
+					    } else {
+
+					        alert("Unknown user role.");
+
+					    }
+
+					} else {
+
+                        alert(
+                            "Invalid User ID or Password."
+                        );
+
+                    }
+
+                };
 
 
-            // STUDENT
-
-            if (isStudent) {
-
-                if (
-                    userId === "STU001" &&
-                    password === "student123"
-                ) {
-
-                    window.location.href =
-                        "student-dashboard.html";
-
-                } else {
-
-                    alert(
-                        "Invalid Student ID or Password."
-                    );
-
-                }
-
-            }
+            const data =
+                "userId=" +
+                encodeURIComponent(userId) +
+                "&password=" +
+                encodeURIComponent(password);
 
 
-            // FACULTY
-
-            else if (isFaculty) {
-
-                if (
-                    userId === "FAC001" &&
-                    password === "faculty123"
-                ) {
-
-                    window.location.href =
-                        "faculty-dashboard.html";
-
-                } else {
-
-                    alert(
-                        "Invalid Faculty ID or Password."
-                    );
-
-                }
-
-            }
-
-
-            // ADMIN
-
-            else if (isAdmin) {
-
-                if (
-                    userId === "ADMIN001" &&
-                    password === "admin123"
-                ) {
-
-                    window.location.href =
-                        "admin-dashboard.html";
-
-                } else {
-
-                    alert(
-                        "Invalid Admin ID or Password."
-                    );
-
-                }
-
-            }
+            xhr.send(data);
 
         }
     );
@@ -1533,7 +1510,9 @@ function closeStudents() {
 function displayAvailableCourses() {
 
     const coursesList =
-        document.getElementById("availableCoursesList");
+        document.getElementById(
+            "availableCoursesList"
+        );
 
     if (!coursesList) {
         return;
@@ -1541,119 +1520,136 @@ function displayAvailableCourses() {
 
     coursesList.innerHTML = "";
 
-    const studentId = "STU001";
+    const xhr =
+        new XMLHttpRequest();
 
-    let availableCount = 0;
+    xhr.open(
+        "GET",
+        "student-enrollments",
+        true
+    );
 
+    xhr.onreadystatechange =
+        function () {
 
-    Object.keys(batches).forEach(function (batchId) {
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
-        const batch =
-            batches[batchId];
+            if (xhr.status !== 200) {
+                return;
+            }
 
+            const enrollments =
+                JSON.parse(xhr.responseText);
 
-        // Check if student is already enrolled
+            const enrolledBatches =
+                new Set();
 
-        const alreadyEnrolled =
-            batch.students.some(function (student) {
+            enrollments.forEach(
+                function (enrollment) {
 
-                return student.id === studentId;
+                    enrolledBatches.add(
+                        enrollment.batchName
+                    );
+                }
+            );
 
-            });
+            let availableCount = 0;
 
+            Object.keys(batches).forEach(
+                function (batchId) {
 
-        // Don't show enrolled batch
+                    const batch =
+                        batches[batchId];
 
-        if (alreadyEnrolled) {
-            return;
-        }
+                    if (
+                        enrolledBatches.has(
+                            batch.name
+                        )
+                    ) {
+                        return;
+                    }
 
+                    availableCount++;
 
-        // At least one course is available
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-        availableCount++;
+                    card.className =
+                        "course-card";
 
+                    card.innerHTML = `
 
-        const card =
-            document.createElement("div");
+                        <div class="course-icon">
+                            ☕
+                        </div>
 
-        card.className =
-            "course-card";
+                        <div class="course-content">
 
+                            <h3>
+                                ${batch.name}
+                            </h3>
 
-        card.innerHTML = `
+                            <p>
+                                ${batch.subject} ·
+                                ${batch.schedule}
+                            </p>
 
-            <div class="course-icon">
-                ☕
-            </div>
+                            <div class="course-meta">
 
-            <div class="course-content">
+                                <span>
+                                    ₹${batch.monthlyFee} / month
+                                </span>
 
-                <h3>
-                    ${batch.name}
-                </h3>
+                                <button
+                                    type="button"
+                                    class="view-batch-btn"
+                                    onclick="enrollStudent('${batchId}')">
 
-                <p>
-                    ${batch.subject} ·
-                    ${batch.schedule}
-                </p>
+                                    Enroll
 
-                <div class="course-meta">
+                                </button>
 
-                    <span>
-                        ₹${batch.monthlyFee} / month
-                    </span>
+                            </div>
 
-                    <button
-                        type="button"
-                        class="view-batch-btn"
-                        onclick="enrollStudent('${batchId}')">
+                        </div>
+                    `;
 
-                        Enroll
+                    coursesList.appendChild(
+                        card
+                    );
+                }
+            );
 
-                    </button>
+            if (availableCount === 0) {
 
-                </div>
+                coursesList.innerHTML = `
 
-            </div>
+                    <div class="no-courses-message">
 
-        `;
+                        <div class="no-courses-icon">
+                            📚
+                        </div>
 
+                        <h3>
+                            No Courses Available
+                        </h3>
 
-        coursesList.appendChild(card);
+                        <p>
+                            There are no courses available
+                            for enrollment at the moment.
+                            Please check back later.
+                        </p>
 
-    });
+                    </div>
+                `;
+            }
+        };
 
-
-    // =================================
-    // NO AVAILABLE COURSES
-    // =================================
-
-    if (availableCount === 0) {
-
-        coursesList.innerHTML = `
-
-            <div class="no-courses-message">
-
-                <div class="no-courses-icon">
-                    📚
-                </div>
-
-                <h3>
-                    No Courses Available
-                </h3>
-
-                <p>
-                    There are no courses available
-                    for enrollment at the moment.
-                    Please check back later.
-                </p>
-
-            </div>
-
-        `;
-
-    }
+    xhr.send();
 }
 displayBatches();
 displayAvailableCourses();
@@ -1671,40 +1667,57 @@ function enrollStudent(batchId) {
         return;
     }
 
-    // Current logged-in student
-    const studentId = "STU001";
+    const xhr =
+        new XMLHttpRequest();
 
-    // Check if already enrolled
-    const alreadyEnrolled =
-        batch.students.some(function (student) {
-            return student.id === studentId;
-        });
-
-    if (alreadyEnrolled) {
-
-        alert(
-            `You are already enrolled in ${batch.name}.`
-        );
-
-        return;
-    }
-
-    // Add student to batch
-    batch.students.push({
-
-        id: studentId,
-        name: "Rahul Das",
-        active: true
-
-    });
-
-    // Refresh student sections
-    displayAvailableCourses();
-    displayMyBatches();
-
-    alert(
-        `You have successfully enrolled in ${batch.name}.`
+    xhr.open(
+        "POST",
+        "enroll-student",
+        true
     );
+
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                displayAvailableCourses();
+
+                displayMyBatches();
+
+                alert(
+                    `You have successfully enrolled in ${batch.name}.`
+                );
+
+            } else if (xhr.status === 409) {
+
+                alert(
+                    `You are already enrolled in ${batch.name}.`
+                );
+
+            } else {
+
+                alert(
+                    xhr.responseText ||
+                    "Unable to enroll in this batch."
+                );
+            }
+        };
+
+    const data =
+        "batchName=" +
+        encodeURIComponent(batch.name);
+
+    xhr.send(data);
 }
 // =================================
 // DISPLAY MY BATCHES
@@ -1721,65 +1734,96 @@ function displayMyBatches() {
 
     myBatchesList.innerHTML = "";
 
-    const studentId = "STU001";
+    const xhr =
+        new XMLHttpRequest();
 
-    Object.keys(batches).forEach(function (batchId) {
+    xhr.open(
+        "GET",
+        "student-enrollments",
+        true
+    );
 
-        const batch = batches[batchId];
+    xhr.onreadystatechange =
+        function () {
 
-        const enrolled =
-            batch.students.some(function (student) {
-                return student.id === studentId;
-            });
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
-        if (!enrolled) {
-            return;
-        }
+            if (xhr.status !== 200) {
+                return;
+            }
 
-        const card =
-            document.createElement("div");
+            const enrollments =
+                JSON.parse(xhr.responseText);
 
-        card.className = "course-card";
+            enrollments.forEach(
+                function (enrollment) {
 
-        card.innerHTML = `
+                    const batchId =
+                        Object.keys(batches).find(
+                            function (id) {
 
-            <div class="course-icon">
-                ☕
-            </div>
+                                return batches[id].name ===
+                                    enrollment.batchName;
+                            }
+                        );
 
-            <div class="course-content">
+                    if (!batchId) {
+                        return;
+                    }
 
-                <h3>
-                    ${batch.name}
-                </h3>
+                    const batch =
+                        batches[batchId];
 
-                <p>
-                    ${batch.subject}
-                </p>
+                    const card =
+                        document.createElement("div");
 
-                <div class="course-meta">
+                    card.className =
+                        "course-card";
 
-                    <span>
-                        ${batch.schedule}
-                    </span>
+                    card.innerHTML = `
 
-                    <button
-                        type="button"
-                        class="view-batch-btn"
-                        onclick="viewStudentBatch('${batchId}')">
+                        <div class="course-icon">
+                            ☕
+                        </div>
 
-                        View Batch →
+                        <div class="course-content">
 
-                    </button>
+                            <h3>
+                                ${batch.name}
+                            </h3>
 
-                </div>
+                            <p>
+                                ${batch.subject}
+                            </p>
 
-            </div>
-        `;
+                            <div class="course-meta">
 
-        myBatchesList.appendChild(card);
+                                <span>
+                                    ${batch.schedule}
+                                </span>
 
-    });
+                                <button
+                                    type="button"
+                                    class="view-batch-btn"
+                                    onclick="viewStudentBatch('${batchId}')">
+
+                                    View Batch →
+
+                                </button>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                    myBatchesList.appendChild(card);
+                }
+            );
+        };
+
+    xhr.send();
 }
 
 // =================================
@@ -1863,66 +1907,129 @@ function toggleStudentProfileEdit() {
 function saveStudentProfile() {
 
     const name =
-        document.getElementById("editStudentName").value.trim();
+        document.getElementById(
+            "editStudentName"
+        ).value.trim();
 
     const phone =
-        document.getElementById("editStudentPhone").value.trim();
+        document.getElementById(
+            "editStudentPhone"
+        ).value.trim();
 
     const email =
-        document.getElementById("editStudentEmail").value.trim();
+        document.getElementById(
+            "editStudentEmail"
+        ).value.trim();
 
     const address =
-        document.getElementById("editStudentAddress").value.trim();
+        document.getElementById(
+            "editStudentAddress"
+        ).value.trim();
 
-
-    // Basic validation
 
     if (!name || !phone || !email || !address) {
 
-        alert("Please fill in all profile fields.");
+        alert(
+            "Please fill in all profile fields."
+        );
 
         return;
     }
 
 
-    // Update displayed profile information
+    const xhr =
+        new XMLHttpRequest();
 
-    document.getElementById("studentProfileName")
-        .textContent = name;
+    xhr.open(
+        "POST",
+        "update-student-profile",
+        true
+    );
 
-    document.getElementById("profileStudentName")
-        .textContent = name;
-
-    document.getElementById("profileStudentPhone")
-        .textContent = phone;
-
-    document.getElementById("profileStudentEmail")
-        .textContent = email;
-
-    document.getElementById("profileStudentAddress")
-        .textContent = address;
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
 
 
-    // Update avatar with first letter
+    xhr.onreadystatechange =
+        function () {
 
-    const avatar =
-        document.querySelector(".student-avatar");
-
-    if (avatar) {
-
-        avatar.textContent =
-            name.charAt(0).toUpperCase();
-
-    }
+            if (xhr.readyState !== 4) {
+                return;
+            }
 
 
-    // Close edit form
+            if (xhr.status === 200) {
 
-    document.getElementById("studentProfileEdit")
-        .style.display = "none";
+                document.getElementById(
+                    "studentProfileName"
+                ).textContent = name;
 
 
-    alert("Profile updated successfully.");
+                document.getElementById(
+                    "profileStudentFullName"
+                ).textContent = name;
+
+
+                document.getElementById(
+                    "profileStudentPhone"
+                ).textContent = phone;
+
+
+                document.getElementById(
+                    "profileStudentEmail"
+                ).textContent = email;
+
+
+                document.getElementById(
+                    "profileStudentAddress"
+                ).textContent = address;
+
+
+                const avatar =
+                    document.querySelector(
+                        ".student-avatar"
+                    );
+
+                if (avatar) {
+
+                    avatar.textContent =
+                        name
+                            .charAt(0)
+                            .toUpperCase();
+                }
+
+
+                document.getElementById(
+                    "studentProfileEdit"
+                ).style.display = "none";
+
+
+                alert(
+                    "Profile updated successfully."
+                );
+
+            } else {
+
+                alert(
+                    xhr.responseText ||
+                    "Unable to update profile."
+                );
+            }
+        };
+
+
+    const data =
+        "phone=" +
+        encodeURIComponent(phone) +
+        "&email=" +
+        encodeURIComponent(email) +
+        "&address=" +
+        encodeURIComponent(address);
+
+
+    xhr.send(data);
 }
 
 // =================================
@@ -2148,3 +2255,131 @@ function closeStudentBatch() {
     batchDetails.style.display = "none";
 
 }
+
+// =================================
+// LOAD STUDENT PROFILE
+// =================================
+
+function loadStudentProfile() {
+
+    const xhr =
+        new XMLHttpRequest();
+
+    xhr.open(
+        "GET",
+        "student-profile",
+        true
+    );
+
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status !== 200) {
+                return;
+            }
+
+            const student =
+                JSON.parse(xhr.responseText);
+
+            const profileName =
+                document.getElementById(
+                    "profileStudentFullName"
+                );
+
+            const profileId =
+                document.getElementById(
+                    "profileStudentId"
+                );
+
+            const studentBatch =
+                document.getElementById(
+                    "studentBatch"
+                );
+
+            const welcome =
+                document.getElementById(
+                    "studentWelcome"
+                );
+
+
+				if (profileName) {
+				    profileName.textContent =
+				        student.name;
+				}
+
+				const profileHeading =
+				    document.getElementById(
+				        "studentProfileName"
+				    );
+
+				if (profileHeading) {
+				    profileHeading.textContent =
+				        student.name;
+				}
+
+
+            if (profileId) {
+
+                profileId.textContent =
+                    student.id;
+
+            }
+
+
+            if (studentBatch) {
+
+                studentBatch.textContent =
+                    student.batch;
+
+            }
+			
+			const profilePhone =
+			    document.getElementById(
+			        "profileStudentPhone"
+			    );
+
+			const profileEmail =
+			    document.getElementById(
+			        "profileStudentEmail"
+			    );
+
+			const profileAddress =
+			    document.getElementById(
+			        "profileStudentAddress"
+			    );
+
+			if (profilePhone) {
+			    profilePhone.textContent =
+			        student.phone || "";
+			}
+
+			if (profileEmail) {
+			    profileEmail.textContent =
+			        student.email || "";
+			}
+
+			if (profileAddress) {
+			    profileAddress.textContent =
+			        student.address || "";
+			}
+
+
+            if (welcome) {
+
+                welcome.textContent =
+                    "Welcome back, " +
+                    student.name +
+                    "!";
+
+            }
+
+        };
+
+    xhr.send();
+}
+
+loadStudentProfile();

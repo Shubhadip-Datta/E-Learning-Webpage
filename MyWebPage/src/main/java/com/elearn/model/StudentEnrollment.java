@@ -1,0 +1,45 @@
+package com.elearn.model;
+
+public class StudentEnrollment {
+
+    private int id;
+    private String studentUserId;
+    private String batchName;
+
+    public StudentEnrollment() {
+    }
+
+    public StudentEnrollment(
+            int id,
+            String studentUserId,
+            String batchName) {
+
+        this.id = id;
+        this.studentUserId = studentUserId;
+        this.batchName = batchName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getStudentUserId() {
+        return studentUserId;
+    }
+
+    public void setStudentUserId(String studentUserId) {
+        this.studentUserId = studentUserId;
+    }
+
+    public String getBatchName() {
+        return batchName;
+    }
+
+    public void setBatchName(String batchName) {
+        this.batchName = batchName;
+    }
+}
