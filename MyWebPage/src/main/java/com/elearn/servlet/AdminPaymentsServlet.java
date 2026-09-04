@@ -3,10 +3,6 @@ package com.elearn.servlet;
 import java.io.IOException;
 import java.util.List;
 
-import com.elearn.model.StudentEnrollment;
-import com.elearn.model.User;
-import com.elearn.service.EnrollmentService;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,19 +10,26 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/student-enrollments")
-public class StudentEnrollmentsServlet extends HttpServlet {
+import com.elearn.model.StudentFeeRecord;
+import com.elearn.model.User;
+import com.elearn.service.StudentFeeService;
+
+@WebServlet("/admin-payments")
+public class AdminPaymentsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private EnrollmentService enrollmentService =
-            new EnrollmentService();
+    private StudentFeeService studentFeeService =
+            new StudentFeeService();
 
     @Override
     protected void doGet(
             HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         HttpSession session =
                 request.getSession(false);
@@ -44,7 +47,7 @@ public class StudentEnrollmentsServlet extends HttpServlet {
                 (User) session.getAttribute("user");
 
         if (user == null ||
-                !"STUDENT".equals(user.getRole())) {
+            !"ADMIN".equals(user.getRole())) {
 
             response.setStatus(
                     HttpServletResponse.SC_FORBIDDEN
@@ -53,44 +56,52 @@ public class StudentEnrollmentsServlet extends HttpServlet {
             return;
         }
 
-        List<StudentEnrollment> enrollments =
-                enrollmentService.getStudentEnrollments(
-                        user.getUserId()
-                );
-
-        response.setContentType(
-                "application/json"
-        );
-
-        response.setCharacterEncoding(
-                "UTF-8"
-        );
+        List<StudentFeeRecord> fees =
+                studentFeeService.getAllFeeRecords();
 
         StringBuilder json =
                 new StringBuilder();
 
         json.append("[");
 
-        for (int i = 0; i < enrollments.size(); i++) {
+        for (int i = 0;
+             i < fees.size();
+             i++) {
 
-            StudentEnrollment enrollment =
-                    enrollments.get(i);
+            StudentFeeRecord fee =
+                    fees.get(i);
+
+            if (i > 0) {
+                json.append(",");
+            }
 
             json.append("{");
 
-            json.append("\"batchId\":")
-                    .append(enrollment.getBatchId())
+            json.append("\"id\":")
+                    .append(fee.getId())
                     .append(",");
 
-            json.append("\"batchName\":\"")
-                    .append(enrollment.getBatchName())
+            json.append("\"studentUserId\":\"")
+                    .append(fee.getStudentUserId())
+                    .append("\",");
+
+            json.append("\"batchId\":")
+                    .append(fee.getBatchId())
+                    .append(",");
+
+            json.append("\"feeMonth\":\"")
+                    .append(fee.getFeeMonth())
+                    .append("\",");
+
+            json.append("\"amount\":")
+                    .append(fee.getAmount())
+                    .append(",");
+
+            json.append("\"status\":\"")
+                    .append(fee.getStatus())
                     .append("\"");
 
             json.append("}");
-
-            if (i < enrollments.size() - 1) {
-                json.append(",");
-            }
         }
 
         json.append("]");

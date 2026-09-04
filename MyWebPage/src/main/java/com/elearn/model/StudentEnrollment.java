@@ -3,6 +3,7 @@ package com.elearn.model;
 public class StudentEnrollment {
 
     private int id;
+    private int batchId;
     private String studentUserId;
     private String batchName;
 
@@ -11,10 +12,12 @@ public class StudentEnrollment {
 
     public StudentEnrollment(
             int id,
+            int batchId,
             String studentUserId,
             String batchName) {
 
         this.id = id;
+        this.batchId = batchId;
         this.studentUserId = studentUserId;
         this.batchName = batchName;
     }
@@ -25,6 +28,14 @@ public class StudentEnrollment {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(int batchId) {
+        this.batchId = batchId;
     }
 
     public String getStudentUserId() {

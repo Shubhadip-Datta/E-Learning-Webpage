@@ -401,6 +401,14 @@
 
 						</div>
 
+						<div class="admin-form-group">
+
+							<label for="adminNewFacultyPassword"> Password </label> <input
+								type="password" id="adminNewFacultyPassword"
+								placeholder="Enter faculty password">
+
+						</div>
+
 
 						<div class="admin-add-faculty-actions">
 
@@ -514,13 +522,10 @@
 					<div class="admin-add-batch-header">
 
 						<div>
-
 							<p class="admin-section-label">NEW BATCH</p>
 
 							<h3>Add Batch</h3>
-
 						</div>
-
 
 						<button type="button" class="admin-add-close-btn"
 							onclick="closeAddBatch()">×</button>
@@ -530,48 +535,82 @@
 
 					<div class="admin-add-batch-form">
 
-						<div class="admin-form-group">
-
-							<label for="adminNewBatchId"> Batch ID </label> <input
-								type="text" id="adminNewBatchId" placeholder="e.g. BAT001">
-
-						</div>
-
+						<!-- Batch Name -->
 
 						<div class="admin-form-group">
 
 							<label for="adminNewBatchName"> Batch Name </label> <input
 								type="text" id="adminNewBatchName"
-								placeholder="e.g. Java Morning Batch">
+								placeholder="e.g. Java Morning Batch" required>
 
 						</div>
 
+
+						<!-- Subject -->
 
 						<div class="admin-form-group">
 
 							<label for="adminNewBatchSubject"> Subject </label> <input
-								type="text" id="adminNewBatchSubject" placeholder="e.g. Java">
+								type="text" id="adminNewBatchSubject" placeholder="e.g. Java"
+								required>
 
 						</div>
 
+
+						<!-- Faculty -->
 
 						<div class="admin-form-group">
 
 							<label for="adminNewBatchFaculty"> Faculty </label> <input
 								type="text" id="adminNewBatchFaculty"
-								placeholder="e.g. Ankit Sharma">
+								placeholder="e.g. Ankit Sharma" required>
 
 						</div>
 
+
+						<!-- Schedule -->
+
+						<div class="admin-form-group">
+
+							<label for="adminNewBatchSchedule"> Schedule </label> <input
+								type="text" id="adminNewBatchSchedule"
+								placeholder="e.g. Monday - Friday, 10:00 AM - 12:00 PM" required>
+
+						</div>
+
+
+						<!-- Start Date -->
+
+						<div class="admin-form-group">
+
+							<label for="adminNewBatchStartDate"> Start Date </label> <input
+								type="date" id="adminNewBatchStartDate" required>
+
+						</div>
+
+
+						<!-- End Date -->
+
+						<div class="admin-form-group">
+
+							<label for="adminNewBatchEndDate"> End Date </label> <input
+								type="date" id="adminNewBatchEndDate" required>
+
+						</div>
+
+
+						<!-- Monthly Fee -->
 
 						<div class="admin-form-group">
 
 							<label for="adminNewBatchFee"> Monthly Fee (₹) </label> <input
 								type="number" id="adminNewBatchFee" placeholder="e.g. 1500"
-								min="0">
+								min="0" step="0.01" required>
 
 						</div>
 
+
+						<!-- Actions -->
 
 						<div class="admin-add-batch-actions">
 
@@ -580,7 +619,6 @@
 
 
 							<button type="button" class="admin-save-btn" onclick="addBatch()">
-
 								Add Batch</button>
 
 						</div>
@@ -588,7 +626,6 @@
 					</div>
 
 				</div>
-
 
 				<!-- ================================
          			BATCH TABLE

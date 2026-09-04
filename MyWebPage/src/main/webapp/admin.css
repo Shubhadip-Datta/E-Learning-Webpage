@@ -1349,7 +1349,7 @@ button {
 }
 
 .admin-batch-fee::before {
-    content: "₹";
+    content: "";
     margin-right: 2px;
 
     color: #918aff;
@@ -2064,4 +2064,57 @@ button {
         width: 100%;
     }
 
+}
+
+/* =================================
+   PAYMENT STATUS
+   ================================= */
+
+.admin-status-paid {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    background: #064f3b;
+    color: #20e6a2;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-status-pending {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+
+    background: #3f2d14;
+    color: #f59e0b;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =================================
+   PAYMENT VERIFY BUTTON
+   ================================= */
+
+.admin-payment-verify-btn {
+    border: none;
+
+    padding: 7px 14px;
+
+    border-radius: 7px;
+
+    background: #635bff;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.admin-payment-verify-btn:hover {
+    background: #5148ee;
 }

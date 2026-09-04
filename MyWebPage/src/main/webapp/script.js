@@ -1520,28 +1520,31 @@ function displayAvailableCourses() {
 
     coursesList.innerHTML = "";
 
-    const xhr =
+    // First get the student's enrollments
+    const enrollmentXhr =
         new XMLHttpRequest();
 
-    xhr.open(
+    enrollmentXhr.open(
         "GET",
         "student-enrollments",
         true
     );
 
-    xhr.onreadystatechange =
+    enrollmentXhr.onreadystatechange =
         function () {
 
-            if (xhr.readyState !== 4) {
+            if (enrollmentXhr.readyState !== 4) {
                 return;
             }
 
-            if (xhr.status !== 200) {
+            if (enrollmentXhr.status !== 200) {
                 return;
             }
 
             const enrollments =
-                JSON.parse(xhr.responseText);
+                JSON.parse(
+                    enrollmentXhr.responseText
+                );
 
             const enrolledBatches =
                 new Set();
@@ -1555,101 +1558,128 @@ function displayAvailableCourses() {
                 }
             );
 
-            let availableCount = 0;
+            // Now get all active batches from MySQL
+            const batchXhr =
+                new XMLHttpRequest();
 
-            Object.keys(batches).forEach(
-                function (batchId) {
+            batchXhr.open(
+                "GET",
+                "batches",
+                true
+            );
 
-                    const batch =
-                        batches[batchId];
+            batchXhr.onreadystatechange =
+                function () {
 
-                    if (
-                        enrolledBatches.has(
-                            batch.name
-                        )
-                    ) {
+                    if (batchXhr.readyState !== 4) {
                         return;
                     }
 
-                    availableCount++;
+                    if (batchXhr.status !== 200) {
+                        return;
+                    }
 
-                    const card =
-                        document.createElement(
-                            "div"
+                    const availableBatches =
+                        JSON.parse(
+                            batchXhr.responseText
                         );
 
-                    card.className =
-                        "course-card";
+                    let availableCount = 0;
 
-                    card.innerHTML = `
+                    availableBatches.forEach(
+                        function (batch) {
 
-                        <div class="course-icon">
-                            ☕
-                        </div>
+                            // Hide batches already enrolled
+                            if (
+                                enrolledBatches.has(
+                                    batch.name
+                                )
+                            ) {
+                                return;
+                            }
 
-                        <div class="course-content">
+                            availableCount++;
 
-                            <h3>
-                                ${batch.name}
-                            </h3>
+                            const card =
+                                document.createElement(
+                                    "div"
+                                );
 
-                            <p>
-                                ${batch.subject} ·
-                                ${batch.schedule}
-                            </p>
+                            card.className =
+                                "course-card";
 
-                            <div class="course-meta">
+                            card.innerHTML = `
 
-                                <span>
-                                    ₹${batch.monthlyFee} / month
-                                </span>
+                                <div class="course-icon">
+                                    ☕
+                                </div>
 
-                                <button
-                                    type="button"
-                                    class="view-batch-btn"
-                                    onclick="enrollStudent('${batchId}')">
+                                <div class="course-content">
 
-                                    Enroll
+                                    <h3>
+                                        ${batch.name}
+                                    </h3>
 
-                                </button>
+                                    <p>
+                                        ${batch.subject} ·
+                                        ${batch.schedule}
+                                    </p>
+
+                                    <div class="course-meta">
+
+                                        <span>
+                                            ₹${batch.monthlyFee} / month
+                                        </span>
+
+                                        <button
+                                            type="button"
+                                            class="view-batch-btn"
+                                            onclick="enrollStudent('${batch.name}')">
+
+                                            Enroll
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            `;
+
+                            coursesList.appendChild(
+                                card
+                            );
+                        }
+                    );
+
+                    if (availableCount === 0) {
+
+                        coursesList.innerHTML = `
+
+                            <div class="no-courses-message">
+
+                                <div class="no-courses-icon">
+                                    📚
+                                </div>
+
+                                <h3>
+                                    No Courses Available
+                                </h3>
+
+                                <p>
+                                    There are no courses available
+                                    for enrollment at the moment.
+                                    Please check back later.
+                                </p>
 
                             </div>
+                        `;
+                    }
+                };
 
-                        </div>
-                    `;
-
-                    coursesList.appendChild(
-                        card
-                    );
-                }
-            );
-
-            if (availableCount === 0) {
-
-                coursesList.innerHTML = `
-
-                    <div class="no-courses-message">
-
-                        <div class="no-courses-icon">
-                            📚
-                        </div>
-
-                        <h3>
-                            No Courses Available
-                        </h3>
-
-                        <p>
-                            There are no courses available
-                            for enrollment at the moment.
-                            Please check back later.
-                        </p>
-
-                    </div>
-                `;
-            }
+            batchXhr.send();
         };
 
-    xhr.send();
+    enrollmentXhr.send();
 }
 displayBatches();
 displayAvailableCourses();
@@ -1659,11 +1689,9 @@ displayMyBatches();
 // ENROLL STUDENT
 // =================================
 
-function enrollStudent(batchId) {
+function enrollStudent(batchName) {
 
-    const batch = batches[batchId];
-
-    if (!batch) {
+    if (!batchName) {
         return;
     }
 
@@ -1695,13 +1723,13 @@ function enrollStudent(batchId) {
                 displayMyBatches();
 
                 alert(
-                    `You have successfully enrolled in ${batch.name}.`
+                    `You have successfully enrolled in ${batchName}.`
                 );
 
             } else if (xhr.status === 409) {
 
                 alert(
-                    `You are already enrolled in ${batch.name}.`
+                    `You are already enrolled in ${batchName}.`
                 );
 
             } else {
@@ -1715,7 +1743,7 @@ function enrollStudent(batchId) {
 
     const data =
         "batchName=" +
-        encodeURIComponent(batch.name);
+        encodeURIComponent(batchName);
 
     xhr.send(data);
 }
@@ -1743,85 +1771,110 @@ function displayMyBatches() {
         true
     );
 
-    xhr.onreadystatechange =
-        function () {
+    xhr.onreadystatechange = function () {
 
-            if (xhr.readyState !== 4) {
-                return;
-            }
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-            if (xhr.status !== 200) {
-                return;
-            }
+        if (xhr.status !== 200) {
+            return;
+        }
 
-            const enrollments =
-                JSON.parse(xhr.responseText);
+        const enrollments =
+            JSON.parse(xhr.responseText);
 
-            enrollments.forEach(
-                function (enrollment) {
+        enrollments.forEach(
+            function (enrollment) {
 
-                    const batchId =
-                        Object.keys(batches).find(
-                            function (id) {
+                const batchId =
+                    enrollment.batchId;
 
-                                return batches[id].name ===
-                                    enrollment.batchName;
-                            }
-                        );
+                const batchXhr =
+                    new XMLHttpRequest();
 
-                    if (!batchId) {
-                        return;
-                    }
+                batchXhr.open(
+                    "GET",
+                    "batch?id=" +
+                    encodeURIComponent(batchId),
+                    true
+                );
 
-                    const batch =
-                        batches[batchId];
+                batchXhr.onreadystatechange =
+                    function () {
 
-                    const card =
-                        document.createElement("div");
+                        if (
+                            batchXhr.readyState !== 4
+                        ) {
+                            return;
+                        }
 
-                    card.className =
-                        "course-card";
+                        if (
+                            batchXhr.status !== 200
+                        ) {
+                            return;
+                        }
 
-                    card.innerHTML = `
+                        const batch =
+                            JSON.parse(
+                                batchXhr.responseText
+                            );
 
-                        <div class="course-icon">
-                            ☕
-                        </div>
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
 
-                        <div class="course-content">
+                        card.className =
+                            "course-card";
 
-                            <h3>
-                                ${batch.name}
-                            </h3>
-
-                            <p>
-                                ${batch.subject}
-                            </p>
-
-                            <div class="course-meta">
-
-                                <span>
-                                    ${batch.schedule}
-                                </span>
-
-                                <button
-                                    type="button"
-                                    class="view-batch-btn"
-                                    onclick="viewStudentBatch('${batchId}')">
-
-                                    View Batch →
-
-                                </button>
-
+                        card.innerHTML = `
+                            <div class="course-icon">
+                                ☕
                             </div>
 
-                        </div>
-                    `;
+                            <div class="course-content">
 
-                    myBatchesList.appendChild(card);
-                }
-            );
-        };
+                                <h3>
+                                    ${batch.name}
+                                </h3>
+
+                                <p>
+                                    ${batch.subject}
+                                </p>
+
+                                <div class="course-meta">
+
+                                    <span>
+                                        ${batch.schedule}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        class="view-batch-btn"
+                                        onclick="viewStudentBatch(${batch.id})">
+
+                                        View Batch →
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        `;
+
+                        myBatchesList.appendChild(
+                            card
+                        );
+
+                    };
+
+                batchXhr.send();
+
+            }
+        );
+
+    };
 
     xhr.send();
 }
@@ -1832,12 +1885,6 @@ function displayMyBatches() {
 
 function viewStudentBatch(batchId) {
 
-    const batch = batches[batchId];
-
-    if (!batch) {
-        return;
-    }
-
     const batchDetails =
         document.getElementById("studentBatchDetails");
 
@@ -1845,40 +1892,121 @@ function viewStudentBatch(batchId) {
         return;
     }
 
-    // Batch name
-    document.getElementById("studentBatchTitle")
-        .textContent = batch.name;
+    const xhr =
+        new XMLHttpRequest();
 
-    // Teacher
-    document.getElementById("studentBatchTeacher")
-        .textContent = "Arindam Sen";
+    xhr.open(
+        "GET",
+        "batch?id=" +
+        encodeURIComponent(batchId),
+        true
+    );
 
-    // Start date
-    document.getElementById("studentBatchStartDate")
-        .textContent = batch.startDate || "Not specified";
+    xhr.onreadystatechange = function () {
 
-    // End date
-    document.getElementById("studentBatchEndDate")
-        .textContent = batch.endDate || "Not specified";
-		
-	// Monthly fee
-	document.getElementById("studentBatchFee")
-		.textContent = `₹${batch.monthlyFee || 0}`;
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-    // Display topics
-    displayStudentTopics(batchId);
-	// Display fees
-	displayStudentFees(batchId);
+        if (xhr.status !== 200) {
 
-    // Show details
-    batchDetails.style.display = "block";
+            alert(
+                "Unable to load batch details."
+            );
 
-    // Scroll to details
-    batchDetails.scrollIntoView({
-        behavior: "smooth"
-    });
+            return;
+        }
+
+        const batch =
+            JSON.parse(
+                xhr.responseText
+            );
+
+
+        // =================================
+        // BATCH INFORMATION FROM DATABASE
+        // =================================
+
+        document.getElementById(
+            "studentBatchTitle"
+        ).textContent =
+            batch.name;
+
+
+        document.getElementById(
+            "studentBatchTeacher"
+        ).textContent =
+            batch.teacher ||
+            "Not specified";
+
+
+        document.getElementById(
+            "studentBatchStartDate"
+        ).textContent =
+            batch.startDate ||
+            "Not specified";
+
+
+        document.getElementById(
+            "studentBatchEndDate"
+        ).textContent =
+            batch.endDate ||
+            "Not specified";
+
+
+        document.getElementById(
+            "studentBatchFee"
+        ).textContent =
+            `₹${batch.monthlyFee || 0}`;
+
+
+        // =================================
+        // CONNECT DATABASE BATCH
+        // TO OLD TOPICS / FEES DATA
+        // =================================
+
+        const frontendBatchId =
+            Object.keys(batches).find(
+                function (id) {
+
+                    return (
+                        batches[id].name ===
+                        batch.name
+                    );
+
+                }
+            );
+
+
+        if (frontendBatchId) {
+
+			displayStudentTopics(
+			    batch.id
+			);
+
+			displayStudentFees(
+			    batch.id
+			);
+
+        }
+
+
+        // =================================
+        // SHOW DETAILS
+        // =================================
+
+        batchDetails.style.display =
+            "block";
+
+
+        batchDetails.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    };
+
+    xhr.send();
 }
-
 // =================================
 // EDIT STUDENT PROFILE
 // =================================
@@ -2047,58 +2175,78 @@ function displayStudentTopics(batchId) {
 
     topicsList.innerHTML = "";
 
-    const batch =
-        batches[batchId];
+    const xhr =
+        new XMLHttpRequest();
 
-    if (!batch) {
-        return;
-    }
+    xhr.open(
+        "GET",
+        "batch-topics?batchId=" +
+        encodeURIComponent(batchId),
+        true
+    );
 
-    if (!batch.coveredTopics) {
-        batch.coveredTopics = {};
-    }
+    xhr.onreadystatechange = function () {
 
-    batch.topics.forEach(function (topic, index) {
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-        const isCovered =
-            batch.coveredTopics[index] === true;
+        if (xhr.status !== 200) {
+            topicsList.innerHTML =
+                "<p>Unable to load course topics.</p>";
+            return;
+        }
 
-        const topicElement =
-            document.createElement("div");
+        const topics =
+            JSON.parse(xhr.responseText);
 
-        topicElement.className =
-            isCovered
-                ? "student-topic-row covered"
-                : "student-topic-row not-covered";
+        if (topics.length === 0) {
 
-        topicElement.innerHTML = `
+            topicsList.innerHTML =
+                "<p>No course topics available.</p>";
 
-            <div class="student-topic-left">
+            return;
+        }
 
-                <span class="student-topic-icon">
-                    ${isCovered ? "✓" : "○"}
-                </span>
+		topics.forEach(function (topic) {
 
-                <span class="student-topic-name">
-                    ${topic}
-                </span>
+		    const topicElement =
+		        document.createElement("div");
 
-            </div>
+		    topicElement.className =
+		        topic.covered
+		            ? "student-topic-row covered"
+		            : "student-topic-row not-covered";
 
+		    topicElement.innerHTML = `
+		        <div class="student-topic-left">
 
-            <span class="student-topic-status">
+		            <span class="student-topic-icon">
+		                ${topic.covered ? "✓" : "○"}
+		            </span>
 
-                ${isCovered
-                    ? "✓ Covered"
-                    : "○ Not Covered"}
+		            <span class="student-topic-name">
+		                ${topic.topicName}
+		            </span>
 
-            </span>
+		        </div>
 
-        `;
+		        <span class="student-topic-status">
+		            ${topic.covered
+		                ? "✓ Covered"
+		                : "○ Not Covered"}
+		        </span>
+		    `;
 
-        topicsList.appendChild(topicElement);
+		    topicsList.appendChild(
+		        topicElement
+		    );
 
-    });
+		});
+
+    };
+
+    xhr.send();
 }
 
 // =================================
@@ -2107,121 +2255,169 @@ function displayStudentTopics(batchId) {
 
 function displayStudentFees(batchId) {
 
-    const feesList =
+    const feesContainer =
         document.getElementById("studentBatchFees");
 
     const monthlyFee =
         document.getElementById("studentMonthlyFee");
 
-    if (!feesList || !monthlyFee) {
+    if (!feesContainer) {
         return;
     }
 
-    const batch =
-        batches[batchId];
+    feesContainer.innerHTML = "";
 
-    if (!batch) {
-        return;
-    }
+    const xhr =
+        new XMLHttpRequest();
 
-    feesList.innerHTML = "";
+    xhr.open(
+        "GET",
+        "student-fees?batchId=" +
+        encodeURIComponent(batchId),
+        true
+    );
 
-    // Display monthly fee
-    monthlyFee.textContent =
-        `₹${batch.monthlyFee} / month`;
+    xhr.onreadystatechange = function () {
 
+        if (xhr.readyState !== 4) {
+            return;
+        }
 
-    // -----------------------------
-    // BATCH START DATE
-    // -----------------------------
+        if (xhr.status !== 200) {
 
-    const startDate =
-        new Date(batch.startDate);
+            feesContainer.innerHTML =
+                "<p>Unable to load fee structure.</p>";
 
+            return;
+        }
 
-    // -----------------------------
-    // BATCH END DATE
-    // -----------------------------
-
-    const endDate =
-        new Date(batch.endDate);
-
-
-    // Start from the first month
-    let currentDate =
-        new Date(
-            startDate.getFullYear(),
-            startDate.getMonth(),
-            1
-        );
-
-
-    // -----------------------------
-    // GENERATE MONTHS
-    // -----------------------------
-
-    while (currentDate <= endDate) {
-
-        const monthName =
-            currentDate.toLocaleString(
-                "en-IN",
-                {
-                    month: "long",
-                    year: "numeric"
-                }
+        const fees =
+            JSON.parse(
+                xhr.responseText
             );
 
 
-        const feeRow =
-            document.createElement("div");
+        // =================================
+        // DISPLAY MONTHLY FEE
+        // =================================
 
-        feeRow.className =
-            "student-fee-row";
+        if (
+            monthlyFee &&
+            fees.length > 0
+        ) {
+
+            monthlyFee.textContent =
+                `₹${fees[0].amount} / month`;
+
+        }
 
 
-        feeRow.innerHTML = `
+        // =================================
+        // NO FEE RECORDS
+        // =================================
 
-            <span>
-                ${monthName}
-            </span>
+        if (fees.length === 0) {
 
-            <span>
-                ₹${batch.monthlyFee}
-            </span>
+            feesContainer.innerHTML =
+                "<p>No fee records available.</p>";
 
-            <span class="fee-status-action">
+            return;
+        }
 
-                <span class="status pending">
-                    Pending
+
+        // =================================
+        // DISPLAY FEE RECORDS
+        // =================================
+
+        fees.forEach(function (fee) {
+
+            const row =
+                document.createElement("div");
+
+            row.className =
+                "fee-row";
+
+
+            // =================================
+            // FORMAT MONTH
+            // =================================
+
+            const monthDate =
+                new Date(fee.feeMonth);
+
+            const monthName =
+                monthDate.toLocaleDateString(
+                    "en-IN",
+                    {
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+
+
+            // =================================
+            // FEE ROW
+            // =================================
+
+            row.innerHTML = `
+
+                <span>
+                    ${monthName}
                 </span>
 
-                <button
-                    type="button"
-                    class="pay-now-btn"
-                    onclick="startPayment(
-                        '${batchId}',
-                        '${monthName}'
-                    )">
+                <span>
+                    ₹${fee.amount}
+                </span>
 
-                    Pay Now
+                <span class="fee-status-action">
 
-                </button>
+                    <span class="status ${
+                        fee.status === "PAID"
+                            ? "paid"
+                            : "pending"
+                    }">
 
-            </span>
+                        ${
+                            fee.status === "PAID"
+                                ? "Paid"
+                                : "Pending"
+                        }
 
-        `;
+                    </span>
 
 
-        feesList.appendChild(feeRow);
+                    ${
+                        fee.status === "PAID"
+                            ? ""
+                            : `
+                                <button
+                                    type="button"
+                                    class="pay-now-btn"
+                                    onclick="startPayment(
+                                        ${fee.batchId},
+                                        '${fee.feeMonth}'
+                                    )">
+
+                                    Pay Now
+
+                                </button>
+                            `
+                    }
+
+                </span>
+
+            `;
 
 
-        // Move to next month
-        currentDate.setMonth(
-            currentDate.getMonth() + 1
-        );
+            feesContainer.appendChild(
+                row
+            );
 
-    }
+        });
 
+    };
+
+    xhr.send();
 }
 
 // =================================
@@ -2230,15 +2426,48 @@ function displayStudentFees(batchId) {
 
 function startPayment(batchId, month) {
 
-    alert(
-        `Payment gateway will be connected here.\n\n` +
-        `Batch: ${batches[batchId].name}\n` +
-        `Month: ${month}\n` +
-        `Amount: ₹${batches[batchId].monthlyFee}`
+    const xhr =
+        new XMLHttpRequest();
+
+    xhr.open(
+        "GET",
+        "batch?id=" +
+        encodeURIComponent(batchId),
+        true
     );
 
-}
+    xhr.onreadystatechange =
+        function () {
 
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status !== 200) {
+
+                alert(
+                    "Unable to load payment details."
+                );
+
+                return;
+            }
+
+            const batch =
+                JSON.parse(
+                    xhr.responseText
+                );
+
+            alert(
+                `Payment gateway will be connected here.\n\n` +
+                `Batch: ${batch.name}\n` +
+                `Month: ${month}\n` +
+                `Amount: ₹${batch.monthlyFee}`
+            );
+
+        };
+
+    xhr.send();
+}
 // =================================
 // CLOSE STUDENT BATCH
 // =================================

@@ -105,7 +105,7 @@ const adminData = {
 		batches: [
 
 		       {
-		           id: "BAT001",
+		           id: 1,
 		           name: "Java Morning Batch",
 		           subject: "Java",
 		           faculty: "Ankit Sharma",
@@ -114,7 +114,7 @@ const adminData = {
 		       },
 
 		       {
-		           id: "BAT002",
+		           id: 2,
 		           name: "Java Evening Batch",
 		           subject: "Java",
 		           faculty: "Ankit Sharma",
@@ -142,45 +142,9 @@ const adminData = {
 		              active: true
 		          }
 
-		      ],
-			  payments: [
-
-			      {
-			          studentId: "STU001",
-			          batchId: "BAT001",
-			          month: "2026-08",
-			          //amount: 1500,
-			          status: "paid"
-			      },
-
-			      {
-			          studentId: "STU002",
-			          batchId: "BAT001",
-			          month: "2026-08",
-			          //amount: 1500,
-			          status: "pending"
-			      },
-
-			      {
-			          studentId: "STU003",
-			          batchId: "BAT001",
-			          month: "2026-08",
-			          //amount: 1500,
-			          status: "pending"
-			      },
-
-			      {
-			          studentId: "STU004",
-			          batchId: "BAT001",
-			          month: "2026-08",
-			          //amount: 1500,
-			          status: "paid"
-			      }
-
-			  ]
-
+		      ]
+			  
 };
-
 
 // =================================
 // DISPLAY ADMIN OVERVIEW
@@ -189,84 +153,226 @@ const adminData = {
 function displayAdminOverview() {
 
     const totalStudents =
-        document.getElementById("totalStudents");
-
-    const totalFaculty =
-        document.getElementById("totalFaculty");
-
-    const activeBatches =
-        document.getElementById("activeBatches");
-
-    const totalCourses =
-        document.getElementById("totalCourses");
-
-
-    if (totalStudents) {
-
-        const xhr =
-            new XMLHttpRequest();
-
-        xhr.open(
-            "GET",
-            "students",
-            true
+        document.getElementById(
+            "totalStudents"
         );
 
-        xhr.onreadystatechange =
-            function () {
+    const totalFaculty =
+        document.getElementById(
+            "totalFaculty"
+        );
 
-                if (xhr.readyState !== 4) {
-                    return;
-                }
+    const activeBatches =
+        document.getElementById(
+            "activeBatches"
+        );
 
-                if (xhr.status === 200) {
-
-                    const students =
-                        JSON.parse(xhr.responseText);
-
-                    totalStudents.textContent =
-                        students.length;
-
-                }
-
-            };
-
-        xhr.send();
-    }
+    const totalCourses =
+        document.getElementById(
+            "totalCourses"
+        );
 
 
-    if (totalFaculty) {
+		// Students
 
-        totalFaculty.textContent =
-            adminData.faculty.length;
+		if (totalStudents) {
 
-    }
+		    fetch("students")
 
+		        .then(function (response) {
+
+		            if (!response.ok) {
+
+		                throw new Error(
+		                    "Failed to load students"
+		                );
+
+		            }
+
+		            return response.json();
+
+		        })
+
+		        .then(function (students) {
+
+		            totalStudents.textContent =
+		                students.length;
+
+		        })
+
+		        .catch(function (error) {
+
+		            console.error(
+		                "Error loading student count:",
+		                error
+		            );
+
+		            totalStudents.textContent =
+		                "0";
+
+		        });
+
+		}
+
+
+		// Faculty
+
+		if (totalFaculty) {
+
+		    fetch("admin-faculty")
+
+		        .then(function (response) {
+
+		            if (!response.ok) {
+
+		                throw new Error(
+		                    "Failed to load faculty"
+		                );
+
+		            }
+
+		            return response.json();
+
+		        })
+
+		        .then(function (facultyList) {
+
+		            totalFaculty.textContent =
+		                facultyList.length;
+
+		        })
+
+		        .catch(function (error) {
+
+		            console.error(
+		                "Error loading faculty count:",
+		                error
+		            );
+
+		            totalFaculty.textContent =
+		                "0";
+
+		        });
+
+		}
+
+
+    // Courses
+
+	if (totalCourses) {
+
+	    fetch("admin-courses")
+	        .then(function (response) {
+
+	            return response.json();
+
+	        })
+	        .then(function (courses) {
+
+	            totalCourses.textContent =
+	                courses.length;
+
+	        })
+	        .catch(function (error) {
+
+	            console.error(
+	                "Error loading course count:",
+	                error
+	            );
+
+	        });
+
+	}
+
+
+    // Batches come from database
 
     if (activeBatches) {
 
-        activeBatches.textContent =
-            adminData.batches.filter(
-                function (batch) {
+        fetch("admin-batches")
 
-                    return batch.active;
+            .then(function (response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load batches"
+                    );
 
                 }
-            ).length;
 
-    }
+                return response.json();
+
+            })
+
+            .then(function (batches) {
+
+                adminData.batches =
+                    batches.map(
+                        function (batch) {
+
+                            return {
+
+                                id: batch.id,
+
+                                name: batch.name,
+
+                                subject: batch.subject,
+
+                                faculty:
+                                    batch.teacher,
+
+                                schedule:
+                                    batch.schedule,
+
+                                startDate:
+                                    batch.startDate,
+
+                                endDate:
+                                    batch.endDate,
+
+                                monthlyFee:
+                                    batch.monthlyFee,
+
+                                active:
+                                    batch.active
+
+                            };
+
+                        }
+                    );
 
 
-    if (totalCourses) {
+                const activeCount =
+                    adminData.batches.filter(
+                        function (batch) {
 
-        totalCourses.textContent =
-            adminData.courses.length;
+                            return batch.active;
+
+                        }
+                    ).length;
+
+
+                activeBatches.textContent =
+                    activeCount;
+
+            })
+
+            .catch(function (error) {
+
+                console.error(
+                    "Error loading batch count:",
+                    error
+                );
+
+                activeBatches.textContent =
+                    "0";
+
+            });
 
     }
 
 }
-
-
 // =================================
 // DISPLAY STUDENTS
 // =================================
@@ -1168,181 +1274,257 @@ displayAdminStudents();
 function displayAdminFaculty(searchTerm = "") {
 
     const facultyList =
-        document.getElementById("adminFacultyList");
+        document.getElementById(
+            "adminFacultyList"
+        );
 
     const countElement =
-        document.getElementById("facultyListCount");
+        document.getElementById(
+            "facultyListCount"
+        );
 
     const summaryElement =
-        document.getElementById("facultyListSummary");
-
-
-    if (!facultyList) {
-        return;
-    }
-
-
-    const term =
-        searchTerm.trim().toLowerCase();
-
-
-    const filteredFaculty =
-        adminData.faculty.filter(
-            function (faculty) {
-
-                return (
-
-                    faculty.id
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    faculty.name
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    faculty.subject
-                        .toLowerCase()
-                        .includes(term)
-
-                );
-
-            }
+        document.getElementById(
+            "facultyListSummary"
         );
 
 
-    facultyList.innerHTML = "";
+    if (!facultyList) {
 
-
-    filteredFaculty.forEach(
-        function (faculty) {
-
-            const index =
-                adminData.faculty.indexOf(faculty);
-
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "admin-faculty-row";
-
-
-            const status =
-                faculty.active
-                    ? "Active"
-                    : "Inactive";
-
-
-            const statusClass =
-                faculty.active
-                    ? "active"
-                    : "inactive";
-
-
-            const actionText =
-                faculty.active
-                    ? "Deactivate"
-                    : "Activate";
-
-
-            const actionClass =
-                faculty.active
-                    ? "deactivate"
-                    : "activate";
-
-
-            row.innerHTML = `
-
-                <span>
-                    ${faculty.id}
-                </span>
-
-
-                <span>
-                    ${faculty.name}
-                </span>
-
-
-                <span>
-                    ${faculty.subject}
-                </span>
-
-
-                <span>
-
-                    <span
-                        class="admin-faculty-status ${statusClass}">
-
-                        ${status}
-
-                    </span>
-
-                </span>
-
-
-                <span class="admin-faculty-actions">
-
-                    <button
-                        type="button"
-                        class="admin-faculty-status-btn ${actionClass}"
-                        onclick="toggleFacultyStatus(${index})">
-
-                        ${actionText}
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="admin-faculty-remove-btn"
-                        onclick="removeFaculty(${index})">
-
-                        Remove
-
-                    </button>
-
-                </span>
-
-            `;
-
-
-            facultyList.appendChild(row);
-
-        }
-    );
-
-
-    if (countElement) {
-
-        countElement.textContent =
-            filteredFaculty.length;
+        return;
 
     }
 
 
-    if (summaryElement) {
+    fetch("admin-faculty")
 
-        if (filteredFaculty.length === 0) {
+        .then(function (response) {
 
-            summaryElement.textContent =
-                "No faculty found";
+            if (!response.ok) {
 
-        } else {
+                throw new Error(
+                    "Failed to load faculty"
+                );
 
-            summaryElement.textContent =
-                `Showing ${filteredFaculty.length} of ${adminData.faculty.length} faculty`;
+            }
 
-        }
+            return response.json();
 
-    }
+        })
+
+        .then(function (facultyListData) {
+
+            // Convert database data
+            // to the format used by admin.js
+
+            adminData.faculty =
+                facultyListData.map(
+                    function (faculty) {
+
+                        return {
+
+                            id: faculty.userId,
+
+                            name: faculty.name,
+
+                            subject: faculty.subject,
+
+                            active: faculty.active
+
+                        };
+
+                    }
+                );
+
+
+            const term =
+                searchTerm
+                    .trim()
+                    .toLowerCase();
+
+
+            const filteredFaculty =
+                adminData.faculty.filter(
+                    function (faculty) {
+
+                        return (
+
+                            faculty.id
+                                .toLowerCase()
+                                .includes(term)
+
+                            ||
+
+                            faculty.name
+                                .toLowerCase()
+                                .includes(term)
+
+                            ||
+
+                            faculty.subject
+                                .toLowerCase()
+                                .includes(term)
+
+                        );
+
+                    }
+                );
+
+
+            facultyList.innerHTML = "";
+
+
+            filteredFaculty.forEach(
+                function (faculty) {
+
+                    const index =
+                        adminData.faculty
+                            .indexOf(faculty);
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "admin-faculty-row";
+
+
+                    const status =
+                        faculty.active
+                            ? "Active"
+                            : "Inactive";
+
+
+                    const statusClass =
+                        faculty.active
+                            ? "active"
+                            : "inactive";
+
+
+                    const actionText =
+                        faculty.active
+                            ? "Deactivate"
+                            : "Activate";
+
+
+                    const actionClass =
+                        faculty.active
+                            ? "deactivate"
+                            : "activate";
+
+
+                    row.innerHTML = `
+
+                        <span>
+                            ${faculty.id}
+                        </span>
+
+                        <span>
+                            ${faculty.name}
+                        </span>
+
+                        <span>
+                            ${faculty.subject}
+                        </span>
+
+                        <span>
+
+                            <span
+                                class="admin-faculty-status ${statusClass}">
+
+                                ${status}
+
+                            </span>
+
+                        </span>
+
+                        <span
+                            class="admin-faculty-actions">
+
+                            <button
+                                type="button"
+                                class="admin-faculty-status-btn ${actionClass}"
+                                onclick="toggleFacultyStatus(${index})">
+
+                                ${actionText}
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-faculty-remove-btn"
+                                onclick="removeFaculty(${index})">
+
+                                Remove
+
+                            </button>
+
+                        </span>
+
+                    `;
+
+
+                    facultyList.appendChild(row);
+
+                }
+            );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    filteredFaculty.length;
+
+            }
+
+
+            if (summaryElement) {
+
+                if (filteredFaculty.length === 0) {
+
+                    summaryElement.textContent =
+                        "No faculty found";
+
+                } else {
+
+                    summaryElement.textContent =
+                        `Showing ${filteredFaculty.length} of ${adminData.faculty.length} faculty`;
+
+                }
+
+            }
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Error loading faculty:",
+                error
+            );
+
+            facultyList.innerHTML = "";
+
+            if (countElement) {
+
+                countElement.textContent =
+                    "0";
+
+            }
+
+            if (summaryElement) {
+
+                summaryElement.textContent =
+                    "Unable to load faculty";
+
+            }
+
+        });
 
 }
-
 
 // =================================
 // OPEN ADD FACULTY
@@ -1428,89 +1610,116 @@ function closeAddFaculty() {
 
 function addFaculty() {
 
-    const id =
+    const userId =
         document.getElementById(
             "adminNewFacultyId"
-        )
-        .value
-        .trim()
-        .toUpperCase();
-
+        ).value.trim();
 
     const name =
         document.getElementById(
             "adminNewFacultyName"
-        )
-        .value
-        .trim();
-
+        ).value.trim();
 
     const subject =
         document.getElementById(
             "adminNewFacultySubject"
-        )
-        .value
-        .trim();
+        ).value.trim();
+
+    const password =
+        document.getElementById(
+            "adminNewFacultyPassword"
+        ).value.trim();
 
 
-    if (!id || !name || !subject) {
+    if (!userId ||
+        !name ||
+        !subject ||
+        !password) {
 
         alert(
-            "Please enter Faculty ID, Faculty Name and Subject."
+            "Please fill in all fields."
         );
 
         return;
-
     }
 
 
-    const alreadyExists =
-        adminData.faculty.some(
-            function (faculty) {
-
-                return faculty.id === id;
-
-            }
-        );
+    const xhr =
+        new XMLHttpRequest();
 
 
-    if (alreadyExists) {
-
-        alert(
-            "A faculty member with this ID already exists."
-        );
-
-        return;
-
-    }
-
-
-    adminData.faculty.push({
-
-        id: id,
-
-        name: name,
-
-        subject: subject,
-
-        active: true
-
-    });
-
-
-    displayAdminFaculty();
-
-    displayAdminOverview();
-
-    closeAddFaculty();
-
-
-    alert(
-        `${name} has been added successfully.`
+    xhr.open(
+        "POST",
+        "admin-add-faculty",
+        true
     );
 
-}
 
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+
+
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+
+                return;
+
+            }
+
+
+            if (xhr.status === 200) {
+
+                alert(
+                    "Faculty added successfully."
+                );
+
+
+                closeAddFaculty();
+
+
+                displayAdminFaculty();
+
+
+                displayAdminOverview();
+
+
+            } else {
+
+                console.error(
+                    "Add faculty error:",
+                    xhr.responseText
+                );
+
+
+                alert(
+                    "Unable to add faculty."
+                );
+
+            }
+
+        };
+
+
+    const data =
+        "userId=" +
+        encodeURIComponent(userId) +
+
+        "&password=" +
+        encodeURIComponent(password) +
+
+        "&name=" +
+        encodeURIComponent(name) +
+
+        "&subject=" +
+        encodeURIComponent(subject);
+
+
+    xhr.send(data);
+}
 
 // =================================
 // TOGGLE FACULTY STATUS
@@ -1529,42 +1738,86 @@ function toggleFacultyStatus(index) {
     }
 
 
-    const action =
-        faculty.active
-            ? "deactivate"
-            : "activate";
-
-
-    const confirmed =
-        confirm(
-            `Are you sure you want to ${action} ${faculty.name}?`
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    faculty.active =
+    const newStatus =
         !faculty.active;
 
 
-    displayAdminFaculty();
+    const xhr =
+        new XMLHttpRequest();
 
 
-    alert(
-        `${faculty.name} is now ${
-            faculty.active
-                ? "Active"
-                : "Inactive"
-        }.`
+    xhr.open(
+        "POST",
+        "admin-update-faculty-status",
+        true
     );
 
-}
 
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+
+
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+
+                return;
+
+            }
+
+
+            if (xhr.status === 200) {
+
+                faculty.active =
+                    newStatus;
+
+
+                displayAdminFaculty();
+
+                displayAdminOverview();
+
+
+                alert(
+                    newStatus
+                        ? "Faculty activated successfully."
+                        : "Faculty deactivated successfully."
+                );
+
+
+            } else {
+
+                console.error(
+                    "Faculty status update error:",
+                    xhr.responseText
+                );
+
+
+                alert(
+                    "Unable to update faculty status."
+                );
+
+            }
+
+        };
+
+
+    const data =
+        "userId=" +
+        encodeURIComponent(
+            faculty.id
+        ) +
+
+        "&active=" +
+        encodeURIComponent(
+            newStatus
+        );
+
+
+    xhr.send(data);
+}
 
 // =================================
 // REMOVE FACULTY
@@ -1575,44 +1828,71 @@ function removeFaculty(index) {
     const faculty =
         adminData.faculty[index];
 
-
     if (!faculty) {
-
         return;
-
     }
-
 
     const confirmed =
         confirm(
-            `Remove ${faculty.name} (${faculty.id})?`
+            `Are you sure you want to remove ${faculty.name}?`
         );
 
-
     if (!confirmed) {
-
         return;
-
     }
 
+    const xhr =
+        new XMLHttpRequest();
 
-    adminData.faculty.splice(
-        index,
-        1
+    xhr.open(
+        "POST",
+        "admin-remove-faculty",
+        true
     );
 
-
-    displayAdminFaculty();
-
-    displayAdminOverview();
-
-
-    alert(
-        `${faculty.name} has been removed.`
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
     );
 
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                alert(
+                    "Faculty removed successfully."
+                );
+
+                displayAdminFaculty();
+
+                displayAdminOverview();
+
+            } else {
+
+                console.error(
+                    "Remove faculty error:",
+                    xhr.responseText
+                );
+
+                alert(
+                    "Unable to remove faculty."
+                );
+            }
+        };
+
+    const data =
+        "userId=" +
+        encodeURIComponent(
+            faculty.id
+        );
+
+    xhr.send(data);
 }
-
 
 // =================================
 // SEARCH FACULTY
@@ -1662,199 +1942,263 @@ function displayAdminBatches(searchTerm = "") {
 
 
     if (!batchesList) {
-
         return;
-
     }
 
 
-    const term =
-        searchTerm.trim().toLowerCase();
+    fetch("admin-batches")
+        .then(function (response) {
+
+            if (!response.ok) {
+                throw new Error(
+                    "Failed to load batches"
+                );
+            }
+
+            return response.json();
+
+        })
+        .then(function (batches) {
+
+            // Store database data
+            adminData.batches =
+                batches.map(function (batch) {
+
+                    return {
+
+                        id: batch.id,
+
+                        name: batch.name,
+
+                        subject: batch.subject,
+
+                        faculty: batch.teacher,
+
+                        schedule: batch.schedule,
+
+                        startDate: batch.startDate,
+
+                        endDate: batch.endDate,
+
+                        monthlyFee: batch.monthlyFee,
+
+                        active: batch.active
+
+                    };
+
+                });
 
 
-    const filteredBatches =
-        adminData.batches.filter(
-            function (batch) {
+            const term =
+                searchTerm
+                    .trim()
+                    .toLowerCase();
 
-                return (
 
-                    batch.id
-                        .toLowerCase()
-                        .includes(term)
+            const filteredBatches =
+                adminData.batches.filter(
+                    function (batch) {
 
-                    ||
+                        return (
 
-                    batch.name
-                        .toLowerCase()
-                        .includes(term)
+                            String(batch.id)
+                                .toLowerCase()
+                                .includes(term)
 
-                    ||
+                            ||
 
-                    batch.subject
-                        .toLowerCase()
-                        .includes(term)
+                            batch.name
+                                .toLowerCase()
+                                .includes(term)
 
-                    ||
+                            ||
 
-                    batch.faculty
-                        .toLowerCase()
-                        .includes(term)
+                            batch.subject
+                                .toLowerCase()
+                                .includes(term)
 
+                            ||
+
+                            batch.faculty
+                                .toLowerCase()
+                                .includes(term)
+
+                        );
+
+                    }
                 );
 
+
+            batchesList.innerHTML = "";
+
+
+            filteredBatches.forEach(
+                function (batch) {
+
+                    const index =
+                        adminData.batches
+                            .indexOf(batch);
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "admin-batch-row";
+
+
+                    const status =
+                        batch.active
+                            ? "Active"
+                            : "Inactive";
+
+
+                    const statusClass =
+                        batch.active
+                            ? "active"
+                            : "inactive";
+
+
+                    const actionText =
+                        batch.active
+                            ? "Deactivate"
+                            : "Activate";
+
+
+                    const actionClass =
+                        batch.active
+                            ? "deactivate"
+                            : "activate";
+
+
+                    row.innerHTML = `
+
+                        <span>
+                            ${batch.id}
+                        </span>
+
+                        <span>
+                            ${batch.name}
+                        </span>
+
+                        <span>
+                            ${batch.subject}
+                        </span>
+
+                        <span>
+                            ${batch.faculty}
+                        </span>
+
+                        <span class="admin-batch-fee">
+                            ₹${batch.monthlyFee}
+                        </span>
+
+                        <span>
+
+                            <span
+                                class="admin-batch-status ${statusClass}">
+
+                                ${status}
+
+                            </span>
+
+                        </span>
+
+                        <span
+                            class="admin-batch-actions">
+
+                            <button
+                                type="button"
+                                class="admin-batch-action-btn"
+                                onclick="editBatch(${index})">
+
+                                Edit
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-batch-status-btn ${actionClass}"
+                                onclick="toggleBatchStatus(${index})">
+
+                                ${actionText}
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-batch-remove-btn"
+                                onclick="removeBatch(${index})">
+
+                                Remove
+
+                            </button>
+
+                        </span>
+
+                    `;
+
+
+                    batchesList.appendChild(row);
+
+                }
+            );
+
+
+            // Update total count
+            if (countElement) {
+
+                countElement.textContent =
+                    filteredBatches.length;
+
             }
-        );
 
 
-    batchesList.innerHTML = "";
+            // Update footer
+            if (summaryElement) {
 
+                if (
+                    filteredBatches.length === 0
+                ) {
 
-    filteredBatches.forEach(
-        function (batch) {
+                    summaryElement.textContent =
+                        "No batches found";
 
-            const index =
-                adminData.batches.indexOf(batch);
+                } else {
 
+                    summaryElement.textContent =
+                        `Showing ${filteredBatches.length} of ${adminData.batches.length} batches`;
 
-            const row =
-                document.createElement("div");
+                }
 
+            }
 
-            row.className =
-                "admin-batch-row";
+        })
+        .catch(function (error) {
 
+            console.error(
+                "Error loading batches:",
+                error
+            );
 
-            const status =
-                batch.active
-                    ? "Active"
-                    : "Inactive";
+            batchesList.innerHTML =
+                "<p>Unable to load batches.</p>";
 
+            if (countElement) {
+                countElement.textContent = "0";
+            }
 
-            const statusClass =
-                batch.active
-                    ? "active"
-                    : "inactive";
+            if (summaryElement) {
+                summaryElement.textContent =
+                    "Unable to load batches";
+            }
 
-
-            const actionText =
-                batch.active
-                    ? "Deactivate"
-                    : "Activate";
-
-
-            const actionClass =
-                batch.active
-                    ? "deactivate"
-                    : "activate";
-
-
-            row.innerHTML = `
-
-                <span>
-                    ${batch.id}
-                </span>
-
-
-                <span>
-                    ${batch.name}
-                </span>
-
-
-                <span>
-                    ${batch.subject}
-                </span>
-
-
-                <span>
-                    ${batch.faculty}
-                </span>
-
-
-                <span class="admin-batch-fee">
-                    ${batch.monthlyFee}
-                </span>
-
-
-                <span>
-
-                    <span
-                        class="admin-batch-status ${statusClass}">
-
-                        ${status}
-
-                    </span>
-
-                </span>
-
-
-                <span class="admin-batch-actions">
-
-                    <button
-                        type="button"
-                        class="admin-batch-action-btn"
-                        onclick="editBatch(${index})">
-
-                        Edit
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="admin-batch-status-btn ${actionClass}"
-                        onclick="toggleBatchStatus(${index})">
-
-                        ${actionText}
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="admin-batch-remove-btn"
-                        onclick="removeBatch(${index})">
-
-                        Remove
-
-                    </button>
-
-                </span>
-
-            `;
-
-
-            batchesList.appendChild(row);
-
-        }
-    );
-
-
-    if (countElement) {
-
-        countElement.textContent =
-            filteredBatches.length;
-
-    }
-
-
-    if (summaryElement) {
-
-        if (filteredBatches.length === 0) {
-
-            summaryElement.textContent =
-                "No batches found";
-
-        } else {
-
-            summaryElement.textContent =
-                `Showing ${filteredBatches.length} of ${adminData.batches.length} batches`;
-
-        }
-
-    }
+        });
 
 }
-
 
 // =================================
 // OPEN BATCHES
@@ -2005,44 +2349,33 @@ function closeAddBatch() {
             "adminAddBatchCard"
         );
 
-
     if (!card) {
-
         return;
-
     }
 
+    card.style.display = "none";
 
-    card.style.display =
-        "none";
-
-
-    document.getElementById(
-        "adminNewBatchId"
-    ).value = "";
-
-
-    document.getElementById(
-        "adminNewBatchName"
-    ).value = "";
-
-
-    document.getElementById(
-        "adminNewBatchSubject"
-    ).value = "";
-
-
-    document.getElementById(
-        "adminNewBatchFaculty"
-    ).value = "";
-
-
-    document.getElementById(
+    const fields = [
+        "adminNewBatchName",
+        "adminNewBatchSubject",
+        "adminNewBatchFaculty",
+        "adminNewBatchSchedule",
+        "adminNewBatchStartDate",
+        "adminNewBatchEndDate",
         "adminNewBatchFee"
-    ).value = "";
+    ];
 
+    fields.forEach(function (id) {
+
+        const input =
+            document.getElementById(id);
+
+        if (input) {
+            input.value = "";
+        }
+
+    });
 }
-
 
 // =================================
 // ADD BATCH
@@ -2050,116 +2383,178 @@ function closeAddBatch() {
 
 function addBatch() {
 
-    const id =
-        document.getElementById(
-            "adminNewBatchId"
-        )
-        .value
-        .trim()
-        .toUpperCase();
-
-
     const name =
         document.getElementById(
             "adminNewBatchName"
-        )
-        .value
-        .trim();
-
+        ).value.trim();
 
     const subject =
         document.getElementById(
             "adminNewBatchSubject"
-        )
-        .value
-        .trim();
+        ).value.trim();
 
-
-    const faculty =
+    const teacher =
         document.getElementById(
             "adminNewBatchFaculty"
-        )
-        .value
-        .trim();
+        ).value.trim();
 
+    const schedule =
+        document.getElementById(
+            "adminNewBatchSchedule"
+        ).value.trim();
+
+    const startDate =
+        document.getElementById(
+            "adminNewBatchStartDate"
+        ).value;
+
+    const endDate =
+        document.getElementById(
+            "adminNewBatchEndDate"
+        ).value;
 
     const monthlyFee =
-        Number(
-            document.getElementById(
-                "adminNewBatchFee"
-            ).value
-        );
+        document.getElementById(
+            "adminNewBatchFee"
+        ).value;
 
 
     if (
-        !id ||
         !name ||
         !subject ||
-        !faculty ||
+        !teacher ||
+        !schedule ||
+        !startDate ||
+        !endDate ||
         !monthlyFee
     ) {
 
         alert(
-            "Please enter all batch details and monthly fee."
+            "Please fill in all batch details."
         );
 
         return;
-
     }
 
 
-    const alreadyExists =
-        adminData.batches.some(
-            function (batch) {
-
-                return batch.id === id;
-
-            }
-        );
-
-
-    if (alreadyExists) {
+    if (endDate < startDate) {
 
         alert(
-            "A batch with this ID already exists."
+            "End date cannot be before start date."
         );
 
         return;
-
     }
 
 
-    adminData.batches.push({
+    const formData =
+        new URLSearchParams();
 
-        id: id,
+    formData.append("name", name);
+    formData.append("subject", subject);
+    formData.append("teacher", teacher);
+    formData.append("schedule", schedule);
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("monthlyFee", monthlyFee);
 
-        name: name,
 
-        subject: subject,
+    fetch("admin-add-batch", {
 
-        faculty: faculty,
+        method: "POST",
 
-        monthlyFee: monthlyFee,
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
 
-        active: true
+        body: formData.toString()
+
+    })
+    .then(function (response) {
+
+        return response.text()
+            .then(function (text) {
+
+                return {
+                    status: response.status,
+                    text: text
+                };
+
+            });
+
+    })
+    .then(function (result) {
+
+        console.log(
+            "admin-add-batch status:",
+            result.status
+        );
+
+        console.log(
+            "admin-add-batch response:",
+            result.text
+        );
+
+
+        if (result.status === 200) {
+
+            alert(
+                "Batch added successfully!"
+            );
+
+            closeAddBatch();
+
+            displayAdminBatches();
+
+            return;
+        }
+
+
+        if (result.status === 401) {
+
+            alert(
+                "Your session has expired. Please log in again."
+            );
+
+            return;
+        }
+
+
+        if (result.status === 403) {
+
+            alert(
+                "You are not authorized to add batches."
+            );
+
+            return;
+        }
+
+
+        // Show the actual backend response
+        alert(
+            "Server error (" +
+            result.status +
+            "):\n\n" +
+            result.text
+        );
+
+    })
+    .catch(function (error) {
+
+        console.error(
+            "Network error:",
+            error
+        );
+
+        alert(
+            "Network error while connecting to the server.\n\n" +
+            error.message
+        );
 
     });
 
-
-    displayAdminBatches();
-
-    displayAdminOverview();
-
-    closeAddBatch();
-
-
-    alert(
-        `${name} has been added successfully.`
-    );
-
 }
-
-
 // =================================
 // EDIT BATCH
 // =================================
@@ -2195,7 +2590,7 @@ function editBatch(index) {
         Number(newFee);
 
 
-    if (!fee || fee < 0) {
+    if (isNaN(fee) || fee < 0) {
 
         alert(
             "Please enter a valid monthly fee."
@@ -2206,14 +2601,88 @@ function editBatch(index) {
     }
 
 
-    batch.monthlyFee =
-        fee;
+    const xhr =
+        new XMLHttpRequest();
 
 
-    displayAdminBatches();
+    xhr.open(
+        "POST",
+        "admin-update-batch",
+        true
+    );
+
+
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
+
+
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+
+                return;
+
+            }
+
+
+            if (xhr.status === 200) {
+
+                batch.monthlyFee =
+                    fee;
+
+
+                displayAdminBatches();
+
+
+                alert(
+                    "Monthly fee updated successfully."
+                );
+
+
+            } else {
+
+                alert(
+                    xhr.responseText ||
+                    "Unable to update monthly fee."
+                );
+
+            }
+
+        };
+
+
+    const data =
+        "id=" +
+        encodeURIComponent(batch.id) +
+
+        "&name=" +
+        encodeURIComponent(batch.name) +
+
+        "&subject=" +
+        encodeURIComponent(batch.subject) +
+
+        "&teacher=" +
+        encodeURIComponent(batch.teacher || batch.faculty) +
+
+        "&schedule=" +
+        encodeURIComponent(batch.schedule || "") +
+
+        "&startDate=" +
+        encodeURIComponent(batch.startDate) +
+
+        "&endDate=" +
+        encodeURIComponent(batch.endDate) +
+
+        "&monthlyFee=" +
+        encodeURIComponent(fee);
+
+
+    xhr.send(data);
 
 }
-
 
 // =================================
 // TOGGLE BATCH STATUS
@@ -2224,53 +2693,119 @@ function toggleBatchStatus(index) {
     const batch =
         adminData.batches[index];
 
-
     if (!batch) {
-
         return;
-
     }
 
 
-    const action =
-        batch.active
-            ? "deactivate"
-            : "activate";
-
-
-    const confirmed =
-        confirm(
-            `Are you sure you want to ${action} ${batch.name}?`
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    batch.active =
+    const newStatus =
         !batch.active;
 
 
-    displayAdminBatches();
+    fetch("admin-update-batch-status", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body:
+            "id=" +
+            encodeURIComponent(batch.id) +
+            "&active=" +
+            encodeURIComponent(newStatus)
+
+    })
+    .then(function (response) {
+
+        return response.text()
+            .then(function (text) {
+
+                return {
+                    ok: response.ok,
+                    status: response.status,
+                    text: text
+                };
+
+            });
+
+    })
+    .then(function (result) {
+
+        console.log(
+            "Batch status response:",
+            result.status,
+            result.text
+        );
 
 
-    displayAdminOverview();
+        if (!result.ok) {
+
+            alert(
+                "Failed to update batch status.\n\n" +
+                result.text
+            );
+
+            return;
+        }
 
 
-    alert(
-        `${batch.name} is now ${
-            batch.active
-                ? "Active"
-                : "Inactive"
-        }.`
-    );
+        let data;
+
+        try {
+
+            data =
+                JSON.parse(result.text);
+
+        } catch (error) {
+
+            alert(
+                "Invalid server response."
+            );
+
+            return;
+        }
+
+
+        if (data.success) {
+
+            alert(
+                newStatus
+                    ? "Batch activated successfully!"
+                    : "Batch deactivated successfully!"
+            );
+
+
+            // Reload batches from database
+
+            displayAdminBatches();
+
+        } else {
+
+            alert(
+                data.message ||
+                "Failed to update batch status."
+            );
+
+        }
+
+    })
+    .catch(function (error) {
+
+        console.error(
+            "Error updating batch status:",
+            error
+        );
+
+        alert(
+            "Network error while updating batch status."
+        );
+
+    });
 
 }
-
 
 // =================================
 // REMOVE BATCH
@@ -2281,44 +2816,124 @@ function removeBatch(index) {
     const batch =
         adminData.batches[index];
 
-
     if (!batch) {
-
         return;
-
     }
 
 
     const confirmed =
         confirm(
-            `Remove ${batch.name} (${batch.id})?`
+            "Are you sure you want to remove \"" +
+            batch.name +
+            "\"?"
         );
 
 
     if (!confirmed) {
-
         return;
-
     }
 
 
-    adminData.batches.splice(
-        index,
-        1
-    );
+    fetch("admin-remove-batch", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body:
+            "id=" +
+            encodeURIComponent(batch.id)
+
+    })
+    .then(function (response) {
+
+        return response.text()
+            .then(function (text) {
+
+                return {
+                    ok: response.ok,
+                    status: response.status,
+                    text: text
+                };
+
+            });
+
+    })
+    .then(function (result) {
+
+        console.log(
+            "Remove batch response:",
+            result.status,
+            result.text
+        );
 
 
-    displayAdminBatches();
+        let data;
 
-    displayAdminOverview();
+        try {
+
+            data =
+                JSON.parse(result.text);
+
+        } catch (error) {
+
+            alert(
+                "Server returned an invalid response."
+            );
+
+            return;
+        }
 
 
-    alert(
-        `${batch.name} has been removed.`
-    );
+        if (!result.ok) {
+
+            alert(
+                data.message ||
+                "Unable to remove this batch."
+            );
+
+            return;
+        }
+
+
+        if (data.success) {
+
+            alert(
+                "Batch removed successfully!"
+            );
+
+
+            // Reload from database
+
+            displayAdminBatches();
+
+        } else {
+
+            alert(
+                data.message ||
+                "Failed to remove batch."
+            );
+
+        }
+
+    })
+    .catch(function (error) {
+
+        console.error(
+            "Error removing batch:",
+            error
+        );
+
+        alert(
+            "Network error while removing batch."
+        );
+
+    });
 
 }
-
 
 // =================================
 // SEARCH BATCHES
@@ -2352,182 +2967,251 @@ if (batchSearch) {
 function displayAdminCourses(searchTerm = "") {
 
     const coursesList =
-        document.getElementById("adminCoursesList");
+        document.getElementById(
+            "adminCoursesList"
+        );
 
     const countElement =
-        document.getElementById("courseListCount");
+        document.getElementById(
+            "courseListCount"
+        );
 
     const summaryElement =
-        document.getElementById("courseListSummary");
-
-
-    if (!coursesList) {
-        return;
-    }
-
-
-    const term =
-        searchTerm.trim().toLowerCase();
-
-
-    const filteredCourses =
-        adminData.courses.filter(
-            function (course) {
-
-                return (
-
-                    course.id
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    course.name
-                        .toLowerCase()
-                        .includes(term)
-
-                    ||
-
-                    course.description
-                        .toLowerCase()
-                        .includes(term)
-
-                );
-
-            }
+        document.getElementById(
+            "courseListSummary"
         );
 
 
-    coursesList.innerHTML = "";
+    if (!coursesList) {
 
-
-    filteredCourses.forEach(
-        function (course) {
-
-            const index =
-                adminData.courses.indexOf(course);
-
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "admin-course-row";
-
-
-            const status =
-                course.active
-                    ? "Active"
-                    : "Inactive";
-
-
-            const statusClass =
-                course.active
-                    ? "active"
-                    : "inactive";
-
-
-            const actionText =
-                course.active
-                    ? "Deactivate"
-                    : "Activate";
-
-
-            const actionClass =
-                course.active
-                    ? "deactivate"
-                    : "activate";
-
-
-            row.innerHTML = `
-
-                <span>
-                    ${course.id}
-                </span>
-
-                <span>
-                    ${course.name}
-                </span>
-
-                <span class="admin-course-description">
-                    ${course.description}
-                </span>
-
-                <span>
-
-                    <span
-                        class="admin-course-status ${statusClass}">
-
-                        ${status}
-
-                    </span>
-
-                </span>
-
-                <span class="admin-course-actions">
-
-                    <button
-                        type="button"
-                        class="admin-course-edit-btn"
-                        onclick="editCourse(${index})">
-
-                        Edit
-
-                    </button>
-
-                    <button
-                        type="button"
-                        class="admin-course-status-btn ${actionClass}"
-                        onclick="toggleCourseStatus(${index})">
-
-                        ${actionText}
-
-                    </button>
-
-                    <button
-                        type="button"
-                        class="admin-course-remove-btn"
-                        onclick="removeCourse(${index})">
-
-                        Remove
-
-                    </button>
-
-                </span>
-
-            `;
-
-
-            coursesList.appendChild(row);
-
-        }
-    );
-
-
-    if (countElement) {
-
-        countElement.textContent =
-            filteredCourses.length;
+        return;
 
     }
 
 
-    if (summaryElement) {
+    fetch("admin-courses")
 
-        if (filteredCourses.length === 0) {
+        .then(function (response) {
 
-            summaryElement.textContent =
-                "No courses found";
+            if (!response.ok) {
 
-        } else {
+                throw new Error(
+                    "Failed to load courses"
+                );
 
-            summaryElement.textContent =
-                `Showing ${filteredCourses.length} of ${adminData.courses.length} courses`;
+            }
 
-        }
+            return response.json();
 
-    }
+        })
+
+        .then(function (coursesData) {
+
+            // Load database courses
+            // into adminData
+
+            adminData.courses =
+                coursesData.map(
+                    function (course) {
+
+                        return {
+
+                            id: course.courseId,
+
+                            name: course.name,
+
+                            description:
+                                course.description,
+
+                            active:
+                                course.active
+
+                        };
+
+                    }
+                );
+
+
+            const term =
+                searchTerm
+                    .trim()
+                    .toLowerCase();
+
+
+            const filteredCourses =
+                adminData.courses.filter(
+                    function (course) {
+
+                        return (
+
+                            course.id
+                                .toLowerCase()
+                                .includes(term)
+
+                            ||
+
+                            course.name
+                                .toLowerCase()
+                                .includes(term)
+
+                        );
+
+                    }
+                );
+
+
+            coursesList.innerHTML = "";
+
+
+            filteredCourses.forEach(
+                function (course) {
+
+                    const index =
+                        adminData.courses
+                            .indexOf(course);
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "admin-course-row";
+
+
+                    const status =
+                        course.active
+                            ? "Active"
+                            : "Inactive";
+
+
+                    const statusClass =
+                        course.active
+                            ? "active"
+                            : "inactive";
+
+
+                    const actionText =
+                        course.active
+                            ? "Deactivate"
+                            : "Activate";
+
+
+                    const actionClass =
+                        course.active
+                            ? "deactivate"
+                            : "activate";
+
+
+                    row.innerHTML = `
+
+                        <span>
+                            ${course.id}
+                        </span>
+
+                        <span>
+                            ${course.name}
+                        </span>
+
+                        <span>
+                            ${course.description || ""}
+                        </span>
+
+                        <span>
+
+                            <span
+                                class="admin-course-status ${statusClass}">
+
+                                ${status}
+
+                            </span>
+
+                        </span>
+
+                        <span
+                            class="admin-course-actions">
+
+                            <button
+                                type="button"
+                                class="admin-course-status-btn ${actionClass}"
+                                onclick="toggleCourseStatus(${index})">
+
+                                ${actionText}
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="admin-course-remove-btn"
+                                onclick="removeCourse(${index})">
+
+                                Remove
+
+                            </button>
+
+                        </span>
+
+                    `;
+
+
+                    coursesList.appendChild(row);
+
+                }
+            );
+
+
+            if (countElement) {
+
+                countElement.textContent =
+                    filteredCourses.length;
+
+            }
+
+
+            if (summaryElement) {
+
+                if (filteredCourses.length === 0) {
+
+                    summaryElement.textContent =
+                        "No courses found";
+
+                } else {
+
+                    summaryElement.textContent =
+                        `Showing ${filteredCourses.length} of ${adminData.courses.length} courses`;
+
+                }
+
+            }
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "Error loading courses:",
+                error
+            );
+
+            coursesList.innerHTML = "";
+
+            if (countElement) {
+
+                countElement.textContent =
+                    "0";
+
+            }
+
+            if (summaryElement) {
+
+                summaryElement.textContent =
+                    "Unable to load courses";
+
+            }
+
+        });
 
 }
 
@@ -2748,53 +3432,108 @@ function addCourse() {
     }
 
 
-    const alreadyExists =
-        adminData.courses.some(
-            function (course) {
+    const formData =
+        new URLSearchParams();
 
-                return course.id === id;
+    formData.append(
+        "courseId",
+        id
+    );
+
+    formData.append(
+        "name",
+        name
+    );
+
+    formData.append(
+        "description",
+        description
+    );
+
+
+    fetch("admin-add-course", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body: formData.toString()
+
+    })
+    .then(
+        function (response) {
+
+            return response.json()
+                .then(
+                    function (data) {
+
+                        return {
+                            status: response.status,
+                            data: data
+                        };
+
+                    }
+                );
+
+        }
+    )
+    .then(
+        function (result) {
+
+            if (result.status === 200 &&
+                result.data.success) {
+
+                closeAddCourse();
+
+                displayAdminCourses();
+
+                displayAdminOverview();
+
+                alert(
+                    name +
+                    " has been added successfully."
+                );
 
             }
-        );
 
+            else if (result.status === 409) {
 
-    if (alreadyExists) {
+                alert(
+                    "A course with this ID already exists."
+                );
 
-        alert(
-            "A course with this ID already exists."
-        );
+            }
 
-        return;
+            else {
 
-    }
+                alert(
+                    result.data.message ||
+                    "Failed to add course."
+                );
 
+            }
 
-    adminData.courses.push({
+        }
+    )
+    .catch(
+        function (error) {
 
-        id: id,
+            console.error(
+                "Error adding course:",
+                error
+            );
 
-        name: name,
+            alert(
+                "Server error while adding course."
+            );
 
-        description: description,
-
-        active: true
-
-    });
-
-
-    displayAdminCourses();
-
-    displayAdminOverview();
-
-    closeAddCourse();
-
-
-    alert(
-        `${name} has been added successfully.`
+        }
     );
 
 }
-
 
 // =================================
 // EDIT COURSE
@@ -2877,10 +3616,14 @@ function toggleCourseStatus(index) {
     }
 
 
+    const newStatus =
+        !course.active;
+
+
     const action =
-        course.active
-            ? "deactivate"
-            : "activate";
+        newStatus
+            ? "activate"
+            : "deactivate";
 
 
     const confirmed =
@@ -2894,25 +3637,101 @@ function toggleCourseStatus(index) {
     }
 
 
-    course.active =
-        !course.active;
+    const formData =
+        new URLSearchParams();
+
+    formData.append(
+        "courseId",
+        course.id
+    );
+
+    formData.append(
+        "active",
+        newStatus
+    );
 
 
-    displayAdminCourses();
+    fetch("admin-update-course-status", {
 
-    displayAdminOverview();
+        method: "POST",
+
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
+
+        body: formData.toString()
+
+    })
+    .then(
+        function (response) {
+
+            return response.json()
+                .then(
+                    function (data) {
+
+                        return {
+                            status: response.status,
+                            data: data
+                        };
+
+                    }
+                );
+
+        }
+    )
+    .then(
+        function (result) {
+
+            if (
+                result.status === 200 &&
+                result.data.success
+            ) {
+
+                course.active =
+                    newStatus;
 
 
-    alert(
-        `${course.name} is now ${
-            course.active
-                ? "Active"
-                : "Inactive"
-        }.`
+                displayAdminCourses();
+
+                displayAdminOverview();
+
+
+                alert(
+                    `${course.name} is now ${
+                        course.active
+                            ? "Active"
+                            : "Inactive"
+                    }.`
+                );
+
+            } else {
+
+                alert(
+                    result.data.message ||
+                    "Failed to update course status."
+                );
+
+            }
+
+        }
+    )
+    .catch(
+        function (error) {
+
+            console.error(
+                "Error updating course status:",
+                error
+            );
+
+            alert(
+                "Server error while updating course status."
+            );
+
+        }
     );
 
 }
-
 
 // =================================
 // REMOVE COURSE
@@ -2923,40 +3742,99 @@ function removeCourse(index) {
     const course =
         adminData.courses[index];
 
-
     if (!course) {
         return;
     }
 
-
     const confirmed =
         confirm(
-            `Remove ${course.name} (${course.id})?`
+            `Are you sure you want to remove ${course.name}?`
         );
-
 
     if (!confirmed) {
         return;
     }
 
+    const formData =
+        new URLSearchParams();
 
-    adminData.courses.splice(
-        index,
-        1
+    formData.append(
+        "courseId",
+        course.id
     );
 
+    fetch("admin-remove-course", {
 
-    displayAdminCourses();
+        method: "POST",
 
-    displayAdminOverview();
+        headers: {
+            "Content-Type":
+                "application/x-www-form-urlencoded"
+        },
 
+        body: formData.toString()
 
-    alert(
-        `${course.name} has been removed.`
+    })
+    .then(
+        function (response) {
+
+            return response.json()
+                .then(
+                    function (data) {
+
+                        return {
+                            status: response.status,
+                            data: data
+                        };
+
+                    }
+                );
+
+        }
+    )
+    .then(
+        function (result) {
+
+            if (
+                result.status === 200 &&
+                result.data.success
+            ) {
+
+                displayAdminCourses();
+
+                displayAdminOverview();
+
+                alert(
+                    `${course.name} has been removed successfully.`
+                );
+
+            } else {
+
+                alert(
+                    result.data.message ||
+                    "Failed to remove course."
+                );
+
+            }
+
+        }
+    )
+    .catch(
+        function (error) {
+
+            console.error(
+                "Error removing course:",
+                error
+            );
+
+            alert(
+                "Server error while removing course."
+            );
+
+        }
     );
 
 }
-
 
 // =================================
 // SEARCH COURSES
@@ -2984,7 +3862,7 @@ if (courseSearch) {
 }
 
 // =================================
-// DISPLAY PAYMENTS
+// DISPLAY ADMIN PAYMENTS
 // =================================
 
 function displayAdminPayments() {
@@ -2994,274 +3872,599 @@ function displayAdminPayments() {
             "adminPaymentsList"
         );
 
-    const monthFilter =
-        document.getElementById(
-            "adminPaymentMonth"
-        );
-
-    const statusFilter =
-        document.getElementById(
-            "adminPaymentStatus"
-        );
-
-    const searchInput =
-        document.getElementById(
-            "paymentSearch"
-        );
-
-
     if (!paymentsList) {
         return;
     }
 
-
-    const selectedMonth =
-        monthFilter
-            ? monthFilter.value
-            : "all";
-
-
-    const selectedStatus =
-        statusFilter
-            ? statusFilter.value
-            : "all";
-
-
-    const searchTerm =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    const filteredPayments =
-        adminData.payments.filter(
-            function (payment) {
-
-                const matchesMonth =
-                    selectedMonth === "all"
-                    ||
-                    payment.month === selectedMonth;
-
-
-                const matchesStatus =
-                    selectedStatus === "all"
-                    ||
-                    payment.status === selectedStatus;
-
-
-					const student =
-					    adminData.students.find(
-					        function (student) {
-
-					            return student.id ===
-					                payment.studentId;
-
-					        }
-					    );
-
-
-					const batch =
-					    adminData.batches.find(
-					        function (batch) {
-
-					            return batch.id ===
-					                payment.batchId;
-
-					        }
-					    );
-
-					const studentName =
-					    student
-					        ? student.name
-					        : "";
-
-
-					const batchName =
-					    batch
-					        ? batch.name
-					        : "";
-
-
-					const matchesSearch =
-					    studentName
-					        .toLowerCase()
-					        .includes(searchTerm)
-
-					    ||
-
-					    payment.studentId
-					        .toLowerCase()
-					        .includes(searchTerm)
-
-					    ||
-
-					    batchName
-					        .toLowerCase()
-					        .includes(searchTerm);
-
-
-                return (
-                    matchesMonth &&
-                    matchesStatus &&
-                    matchesSearch
-                );
-
-            }
-        );
-
-
     paymentsList.innerHTML = "";
 
+    const xhr =
+        new XMLHttpRequest();
 
-    filteredPayments.forEach(
-        function (payment) {
+    xhr.open(
+        "GET",
+        "admin-payments",
+        true
+    );
 
-            const index =
-                adminData.payments.indexOf(
-                    payment
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status !== 200) {
+
+                paymentsList.innerHTML = `
+                    <div class="admin-payment-row">
+                        <span>
+                            Unable to load payments.
+                        </span>
+                    </div>
+                `;
+
+                return;
+            }
+
+            const payments =
+                JSON.parse(
+                    xhr.responseText
                 );
-				const student =
-				    adminData.students.find(
-				        function (student) {
-
-				            return student.id ===
-				                payment.studentId;
-
-				        }
-				    );
 
 
-				const batch =
-				    adminData.batches.find(
-				        function (batch) {
+            // =================================
+            // PAYMENT FILTER ELEMENTS
+            // =================================
 
-				            return batch.id ===
-				                payment.batchId;
+            const monthFilter =
+                document.getElementById(
+                    "adminPaymentMonth"
+                );
 
-				        }
-				    );
-					const paymentAmount =
-					    batch
-					        ? Number(batch.monthlyFee)
-					        : 0;
-				
+            const statusFilter =
+                document.getElementById(
+                    "adminPaymentStatus"
+                );
 
-
-            const row =
-                document.createElement("div");
-
-
-            row.className =
-                "admin-payment-row";
+            const searchInput =
+                document.getElementById(
+                    "paymentSearch"
+                );
 
 
-            const statusText =
-                payment.status === "paid"
-                    ? "Paid"
-                    : "Pending";
+            // =================================
+            // SAVE CURRENT MONTH VALUE
+            // =================================
+
+            const currentMonthValue =
+                monthFilter
+                    ? monthFilter.value
+                    : "all";
 
 
-            const statusClass =
-                payment.status === "paid"
-                    ? "paid"
-                    : "pending";
+            // =================================
+            // BUILD MONTH FILTER FROM DATABASE
+            // =================================
+
+            if (monthFilter) {
+
+                const uniqueMonths =
+                    [
+                        ...new Set(
+                            payments.map(
+                                function (payment) {
+
+                                    return payment.feeMonth
+                                        .substring(0, 7);
+
+                                }
+                            )
+                        )
+                    ];
+
+                uniqueMonths.sort();
 
 
-            row.innerHTML = `
+                monthFilter.innerHTML =
+                    '<option value="all">All Months</option>';
 
-			<span>
-			    ${student ? student.name : "Unknown Student"}
-			</span>
 
-			<span>
-			    ${batch ? batch.name : "Unknown Batch"}
-			</span>
+                uniqueMonths.forEach(
+                    function (month) {
 
-                <span>
-                    ${formatPaymentMonth(
-                        payment.month
-                    )}
-                </span>
+                        const monthDate =
+                            new Date(
+                                month + "-01"
+                            );
 
-                <span
-                    class="admin-payment-amount">
 
-                     ₹${paymentAmount}
+                        const monthName =
+                            monthDate.toLocaleDateString(
+                                "en-IN",
+                                {
+                                    month: "long",
+                                    year: "numeric"
+                                }
+                            );
 
-                </span>
 
-                <span>
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
 
-                    <span
-                        class="admin-payment-status ${statusClass}">
 
-                        ${statusText}
+                        option.value =
+                            month;
 
-                    </span>
+                        option.textContent =
+                            monthName;
 
-                </span>
 
-                <span
-                    class="admin-payment-actions">
+                        monthFilter.appendChild(
+                            option
+                        );
 
-                    <button
-                        type="button"
-                        class="admin-payment-view-btn"
-                        onclick="viewPayment(${index})">
+                    }
+                );
 
-                        View
 
-                    </button>
+                if (
+                    currentMonthValue === "all" ||
+                    uniqueMonths.includes(
+                        currentMonthValue
+                    )
+                ) {
 
-                    ${
-                        payment.status === "pending"
-                            ? `
-                                <button
-                                    type="button"
-                                    class="admin-payment-verify-btn"
-                                    onclick="verifyPayment(${index})">
+                    monthFilter.value =
+                        currentMonthValue;
 
-                                    Verify
+                } else {
 
-                                </button>
-                            `
-                            : ""
+                    monthFilter.value =
+                        "all";
+
+                }
+
+            }
+
+
+            // =================================
+            // GET CURRENT FILTER VALUES
+            // =================================
+
+            const selectedMonth =
+                monthFilter
+                    ? monthFilter.value
+                    : "all";
+
+
+            const selectedStatus =
+                statusFilter
+                    ? statusFilter.value
+                    : "all";
+
+
+            const searchTerm =
+                searchInput
+                    ? searchInput.value
+                        .trim()
+                        .toLowerCase()
+                    : "";
+
+
+            // =================================
+            // FILTER PAYMENTS
+            // =================================
+
+            const filteredPayments =
+                payments.filter(
+                    function (payment) {
+
+
+                        // -------------------------
+                        // MONTH FILTER
+                        // -------------------------
+
+                        const matchesMonth =
+                            selectedMonth === "all"
+                            ||
+                            payment.feeMonth.startsWith(
+                                selectedMonth
+                            );
+
+
+                        // -------------------------
+                        // STATUS FILTER
+                        // -------------------------
+
+                        const matchesStatus =
+                            selectedStatus === "all"
+                            ||
+                            payment.status
+                                .toLowerCase() ===
+                            selectedStatus;
+
+
+                        // -------------------------
+                        // FIND STUDENT
+                        // -------------------------
+
+                        const student =
+                            adminData.students.find(
+                                function (student) {
+
+                                    return student.id ===
+                                        payment.studentUserId;
+
+                                }
+                            );
+
+
+                        // -------------------------
+                        // FIND BATCH
+                        // -------------------------
+
+                        const batch =
+                            adminData.batches.find(
+                                function (batch) {
+
+                                    return Number(
+                                        batch.id
+                                    ) === Number(
+                                        payment.batchId
+                                    );
+
+                                }
+                            );
+
+
+                        const studentName =
+                            student
+                                ? student.name
+                                    .toLowerCase()
+                                : "";
+
+
+                        const batchName =
+                            batch
+                                ? batch.name
+                                    .toLowerCase()
+                                : "";
+
+
+                        // -------------------------
+                        // SEARCH FILTER
+                        // -------------------------
+
+                        const matchesSearch =
+                            studentName.includes(
+                                searchTerm
+                            )
+                            ||
+                            payment.studentUserId
+                                .toLowerCase()
+                                .includes(
+                                    searchTerm
+                                )
+                            ||
+                            batchName.includes(
+                                searchTerm
+                            );
+
+
+                        return (
+                            matchesMonth &&
+                            matchesStatus &&
+                            matchesSearch
+                        );
+
+                    }
+                );
+
+
+            // =================================
+            // PAYMENT SUMMARY
+            // =================================
+
+            let totalExpected = 0;
+
+            let totalCollected = 0;
+
+            let totalPending = 0;
+
+
+            filteredPayments.forEach(
+                function (payment) {
+
+                    const amount =
+                        Number(
+                            payment.amount
+                        ) || 0;
+
+
+                    totalExpected +=
+                        amount;
+
+
+                    if (
+                        payment.status ===
+                        "PAID"
+                    ) {
+
+                        totalCollected +=
+                            amount;
+
+                    } else {
+
+                        totalPending +=
+                            amount;
+
                     }
 
-                </span>
-
-            `;
-
-
-            paymentsList.appendChild(row);
-
-        }
-    );
+                }
+            );
 
 
-    updatePaymentSummary(
-        filteredPayments
-    );
+            // =================================
+            // UPDATE SUMMARY CARDS
+            // =================================
+
+            const totalExpectedElement =
+                document.getElementById(
+                    "adminTotalExpected"
+                );
 
 
-    const summary =
-        document.getElementById(
-            "paymentListSummary"
-        );
+            const totalCollectedElement =
+                document.getElementById(
+                    "adminTotalCollected"
+                );
 
 
-    if (summary) {
+            const totalPendingElement =
+                document.getElementById(
+                    "adminTotalPending"
+                );
 
-        summary.textContent =
-            `Showing ${filteredPayments.length} of ${adminData.payments.length} payment records`;
 
-    }
+            const recordsElement =
+                document.getElementById(
+                    "adminPaymentRecords"
+                );
+
+
+            if (totalExpectedElement) {
+
+                totalExpectedElement.textContent =
+                    `₹${totalExpected}`;
+
+            }
+
+
+            if (totalCollectedElement) {
+
+                totalCollectedElement.textContent =
+                    `₹${totalCollected}`;
+
+            }
+
+
+            if (totalPendingElement) {
+
+                totalPendingElement.textContent =
+                    `₹${totalPending}`;
+
+            }
+
+
+            if (recordsElement) {
+
+                recordsElement.textContent =
+                    filteredPayments.length;
+
+            }
+
+
+            // =================================
+            // NO PAYMENT RECORDS
+            // =================================
+
+            if (
+                filteredPayments.length === 0
+            ) {
+
+                paymentsList.innerHTML = `
+                    <div class="admin-payment-row">
+                        <span>
+                            No payment records found.
+                        </span>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            // =================================
+            // DISPLAY PAYMENT RECORDS
+            // =================================
+
+            filteredPayments.forEach(
+                function (payment) {
+
+
+                    const row =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    row.className =
+                        "admin-payment-row";
+
+
+                    // -------------------------
+                    // FORMAT MONTH
+                    // -------------------------
+
+                    const monthDate =
+                        new Date(
+                            payment.feeMonth
+                        );
+
+
+                    const monthName =
+                        monthDate.toLocaleDateString(
+                            "en-IN",
+                            {
+                                month: "long",
+                                year: "numeric"
+                            }
+                        );
+
+
+                    // -------------------------
+                    // FIND STUDENT
+                    // -------------------------
+
+                    const student =
+                        adminData.students.find(
+                            function (student) {
+
+                                return student.id ===
+                                    payment.studentUserId;
+
+                            }
+                        );
+
+
+                    // -------------------------
+                    // FIND BATCH
+                    // -------------------------
+
+                    const batch =
+                        adminData.batches.find(
+                            function (batch) {
+
+                                return Number(
+                                    batch.id
+                                ) === Number(
+                                    payment.batchId
+                                );
+
+                            }
+                        );
+
+
+                    const studentName =
+                        student
+                            ? student.name
+                            : "Unknown Student";
+
+
+                    const batchName =
+                        batch
+                            ? batch.name
+                            : "Unknown Batch";
+
+
+                    // -------------------------
+                    // CREATE PAYMENT ROW
+                    // -------------------------
+
+                    row.innerHTML = `
+
+                        <span>
+                            ${studentName}
+                        </span>
+
+
+                        <span>
+                            ${batchName}
+                        </span>
+
+
+                        <span>
+                            ${monthName}
+                        </span>
+
+
+                        <span>
+                            ₹${payment.amount}
+                        </span>
+
+
+                        <span>
+
+                            ${
+                                payment.status ===
+                                "PAID"
+
+                                    ? `
+                                        <span
+                                            class="admin-status-paid"
+                                        >
+                                            Paid
+                                        </span>
+                                      `
+
+                                    : `
+                                        <span
+                                            class="admin-status-pending"
+                                        >
+                                            Pending
+                                        </span>
+                                      `
+                            }
+
+                        </span>
+
+
+                        <span>
+
+                            ${
+                                payment.status ===
+                                "PAID"
+
+                                    ? `
+                                        <span>
+                                            Verified
+                                        </span>
+                                      `
+
+                                    : `
+                                        <button
+                                            type="button"
+                                            class="admin-payment-verify-btn"
+                                            onclick="verifyPayment(
+                                                ${payment.id}
+                                            )"
+                                        >
+                                            Verify
+                                        </button>
+                                      `
+                            }
+
+                        </span>
+
+                    `;
+
+
+                    paymentsList.appendChild(
+                        row
+                    );
+
+                }
+            );
+
+        };
+
+
+    xhr.send();
 
 }
-
-
 // =================================
 // FORMAT MONTH
 // =================================
@@ -3540,69 +4743,72 @@ function closePayments() {
 // VERIFY PAYMENT
 // =================================
 
-function verifyPayment(index) {
+function verifyPayment(feeRecordId) {
 
-    const payment =
-        adminData.payments[index];
+    const xhr =
+        new XMLHttpRequest();
 
-
-    if (!payment) {
-
-        return;
-
-    }
-
-
-    if (payment.status === "paid") {
-
-        return;
-
-    }
-
-
-    const student =
-        adminData.students.find(
-            function (student) {
-
-                return student.id ===
-                    payment.studentId;
-
-            }
-        );
-
-
-    const studentName =
-        student
-            ? student.name
-            : "Unknown Student";
-
-
-    const confirmed =
-        confirm(
-            `Verify payment for ${studentName} for ${formatPaymentMonth(payment.month)}?`
-        );
-
-
-    if (!confirmed) {
-
-        return;
-
-    }
-
-
-    payment.status =
-        "paid";
-
-
-    displayAdminPayments();
-
-
-    alert(
-        `Payment verified for ${studentName}.`
+    xhr.open(
+        "POST",
+        "verify-payment",
+        true
     );
 
-}
+    xhr.setRequestHeader(
+        "Content-Type",
+        "application/x-www-form-urlencoded"
+    );
 
+    xhr.onreadystatechange =
+        function () {
+
+            if (xhr.readyState !== 4) {
+                return;
+            }
+
+            if (xhr.status === 200) {
+
+                alert(
+                    "Payment verified successfully."
+                );
+
+                // Reload payment records
+                displayAdminPayments();
+
+                return;
+            }
+
+            if (xhr.status === 404) {
+
+                alert(
+                    "Payment record not found."
+                );
+
+                return;
+            }
+
+            if (xhr.status === 403) {
+
+                alert(
+                    "You are not authorized to verify payments."
+                );
+
+                return;
+            }
+
+            alert(
+                "Unable to verify payment."
+            );
+        };
+
+    const data =
+        "feeRecordId=" +
+        encodeURIComponent(
+            feeRecordId
+        );
+
+    xhr.send(data);
+}
 // =================================
 // VIEW PAYMENT
 // =================================

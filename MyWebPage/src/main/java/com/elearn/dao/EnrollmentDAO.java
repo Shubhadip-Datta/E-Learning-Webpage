@@ -87,10 +87,13 @@ public class EnrollmentDAO {
                 new ArrayList<>();
 
         String sql =
-                "SELECT id, student_user_id, batch_name " +
-                "FROM student_enrollments " +
-                "WHERE student_user_id = ? " +
-                "ORDER BY id";
+                "SELECT se.id, b.id AS batch_id, " +
+                "se.student_user_id, b.name AS batch_name " +
+                "FROM student_enrollments se " +
+                "JOIN batches b " +
+                "ON se.batch_name = b.name " +
+                "WHERE se.student_user_id = ? " +
+                "ORDER BY se.id";
 
         try (
                 Connection connection =
@@ -100,7 +103,10 @@ public class EnrollmentDAO {
                         connection.prepareStatement(sql)
         ) {
 
-            statement.setString(1, studentUserId);
+            statement.setString(
+                    1,
+                    studentUserId
+            );
 
             try (
                     ResultSet result =
@@ -112,6 +118,7 @@ public class EnrollmentDAO {
                     StudentEnrollment enrollment =
                             new StudentEnrollment(
                                     result.getInt("id"),
+                                    result.getInt("batch_id"),
                                     result.getString(
                                             "student_user_id"),
                                     result.getString(
